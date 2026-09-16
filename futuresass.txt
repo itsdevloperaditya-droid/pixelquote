@@ -1,0 +1,139 @@
+==============================================================
+PIXELQUOTE KE BAAD — 5 WEEK, 5 MICRO-SAAS (futuresass.txt)
+==============================================================
+Rule har project ke liye (fix hai, todna mat):
+1. 100% FREE banana + chalana (koi paid API nahi, Render free tier).
+2. 1 week me SHIP + X pe build-in-public post (code 50%, posting 50%).
+3. Har app me growth loop hoga (share/referral/review — jaise PixelQuote me).
+4. Payment gateway abhi nahi — sirf waitlist/unlock wale hooks.
+5. Stack wahi rahega jo aata hai: HTML/CSS/JS + Node + Python (Pillow).
+
+Pipeline har week: Mon-Tue core feature → Wed-Thu polish + growth loop →
+Fri deploy → Sat-Sun X pe 3 posts + doston se feedback. Metric hit = next idea,
+nahi hit = user se pooch ke 2 din fix, phir bhi nahi = chhod ke aage badho.
+
+
+--------------------------------------------------------------
+WEEK 1 — BunkMate 😎 "Kitni class bunk kar sakta hun?"
+--------------------------------------------------------------
+PROBLEM: Har college student roz ye calculate karta hai — "75% attendance
+criteria hai, abhi meri X% hai, aur kitni bunk kar sakta hun?" Existing
+calculator sites ghatiya dikhti hain aur save nahi karti.
+USER: College students (pehla saal sabse zyada pareshan).
+SOLUTION: Subject-wise attended/total daalo → app batayega kitni bunk safe hai,
+kitni attend karni padegi, aur kab danger zone hai.
+MVP FEATURES:
+  1. Subject add karo (naam + attended + total + criteria %, default 75).
+  2. Auto math: "4 aur bunk kar sakte ho ✅" ya "agli 3 attend karni padegi 🔴".
+  3. Data browser me save (localStorage — login nahi, backend nahi).
+  4. "Bunk card" share image (PixelQuote wala Pillow skill reuse!):
+     "Main 6 class bunk kar sakta hun 😎 — BunkMate" → WhatsApp status pe jayega.
+  5. Semester reset button.
+NOT BUILDING: Login, multiple semester history, timetable integration.
+STACK: Sirf HTML/CSS/JS, single page. Backend ki zaroorat nahi (v1 me).
+GROWTH LOOP: Shareable bunk card = free marketing har WhatsApp status pe.
+MONEY-LATER HOOK: "Pro: unlimited subjects + exam prediction" (waitlist).
+DONE = 50 students ne apna data dala + 5 ne bunk card share kiya.
+
+
+--------------------------------------------------------------
+WEEK 2 — CertiFast 🏆 "Fest ke 200 certificates 2 min me"
+--------------------------------------------------------------
+PROBLEM: Har college club/fest/event ke baad core team Canva me ek-ek naam
+likh ke participation certificates banati hai. 200 bacche = 2 din barbaad.
+USER: Club leads, event coordinators, class CRs (ye log har sem me milenge).
+SOLUTION: Sundar template chuno + naam ki list (CSV ya ek-per-line) paste karo →
+ek click me saare certificates (PNG/PDF) download.
+MVP FEATURES:
+  1. 3 certificate templates (Pillow se render, PixelQuote skill reuse).
+  2. Naam list paste/CSV upload → live preview pehle 3 naam ka.
+  3. Event naam + date + sign line customize.
+  4. ZIP me saare download (Python backend zip banayega).
+  5. "Made by CertiFast" chhota footer (free plan hook).
+NOT BUILDING: Login, email bhejna, QR verification, payment.
+STACK: Wahi PixelQuote stack (Node serve + Python Pillow + zip).
+GROWTH LOOP: Har certificate pe chhota footer = har baantne pe marketing.
+Har club se agle event ka order pakka.
+MONEY-LATER HOOK: "Footer हटाओ + apna logo" (waitlist).
+DONE = 1 real fest/club ne ise use karke certificates baante.
+
+
+--------------------------------------------------------------
+WEEK 3 — BillBaant 🧾 "Restaurant bill + UPI QR, jhagda khatam"
+--------------------------------------------------------------
+PROBLEM: Doston ke saath khane ke baad bill split pe jhagda + "paise bhej de
+yaar" ke 10 chakkar. Splitwise bhari lagta hai, aur UPI me amount bharna
+padta hai.
+USER: Hostelers, office groups — jo bhi saath khata hai.
+SOLUTION: Total + log + kaun-kya-khaya (equal ya custom) daalo → har bande ke
+liye prefilled UPI QR (kholo, scan, pay — amount pehle se bhara).
+MVP FEATURES:
+  1. Bill total + tax/tip + members + equal/custom split math.
+  2. Har member ka UPI QR (upi://pay deep link, qrcode lib se, amount set).
+  3. Ek shareable split summary link/text (WhatsApp ready).
+  4. "Maine de diya ✅" tick per member (local).
+  5. Dark, premium mobile-first design (phone pe use hoga).
+NOT BUILDING: Login, bank/UPI integration (paise app ke andar nahi jayenge —
+QR sirf UPI app kholta hai),-consume history backend.
+STACK: HTML/CSS/JS + qrcode lib. Backend optional (sirf share link ke liye).
+GROWTH LOOP: Split summary group me share hota hai = har dinner pe N naye log.
+MONEY-LATER HOOK: "Group history + monthly hisaab" (waitlist).
+DONE = 1 real restaurant bill isse split hua (doston ke saath khud test kar).
+
+
+--------------------------------------------------------------
+WEEK 4 — UdhaarBook 🤝 "Paise udhaar diye? Bhool jaao nahi."
+--------------------------------------------------------------
+PROBLEM: "Bhai 500 de de, kal deta hun" — aur wo kal kabhi nahi aata. Maangne
+me awkward lagta hai, hisaab bhool jata hai.
+USER: Har student, har working banda. Universal problem.
+SOLUTION: Udhaar entry (naam + amount + date) + polite reminder generator —
+seedha se lekar funny tak, WhatsApp-ready message ek click me.
+MVP FEATURES:
+  1. Udhaar add karo (naam, amount, date, note) — list + total pending.
+  2. Reminder generator: 3 tone (Polite 🙂 / Direct 😠 / Funny 😂) → message
+     copy ya WhatsApp pe seedha bhejo.
+  3. "Wapas mil gaya ✅" → entry settled (history me rahe).
+  4. Total "fasaa hua paisa" counter (dard dikhega to action hoga).
+  5. Data browser me save (login nahi).
+NOT BUILDING: Login, paise transfer, legal/collection features, backend DB v1 me.
+STACK: Sirf HTML/CSS/JS. (v2 me backend sync jab users aayein.)
+GROWTH LOOP: Funny reminder screenshots X pe viral hote hain ("tone: funny"
+  wale message ka screenshot = meme marketing).
+MONEY-LATER HOOK: "Auto-reminder dates + group hisaab" (waitlist).
+DONE = 10 logon ne apni udhaari entry ki + 1 funny reminder screenshot X pe post.
+
+
+--------------------------------------------------------------
+WEEK 5 — TimeTableCard 🗓️ "CR wala ganda timetable → sundar card"
+--------------------------------------------------------------
+PROBLEM: Har class ka CR WhatsApp group me ganda timetable screenshot bhejta
+hai (Excel photo, half-cut). Tuition teachers, gym trainers ka bhi wahi haal.
+USER: CRs, tuition teachers, coaches/trainers.
+SOLUTION: Din-wise periods typed karo → ek click me sundar, readable timetable
+card image (1080px) → group me share.
+MVP FEATURES:
+  1. Mon-Sat grid input (time + subject per slot).
+  2. 3 clean templates (Pillow render, PixelQuote skill reuse).
+  3. Live preview + PNG download.
+  4. Class/group naam header pe (e.g. "SY B.Tech Div A").
+  5. Chhota footer credit (free plan hook).
+NOT BUILDING: Login, auto-reminders, attendance link (BunkMate se jodna v2 me).
+STACK: Wahi PixelQuote stack (Node + Python Pillow).
+GROWTH LOOP: Har class group me share = 60 bacche ek saath dekhte hain.
+2-3 CRs pakad lo, college tumhara.
+MONEY-LATER HOOK: "Apne colors/logo + footer हटाओ" (waitlist) + BunkMate bundle.
+DONE = 2 real class groups me tumhara card forward hua.
+
+
+==============================================================
+BRUTAL ADVICE (ye mat bhoolna)
+==============================================================
+- 1 week strict hai. 7 din me ship nahi hua = scope kaato, feature mat badhao.
+- Har project ka pehla user TUM khud + tere 5 dost. Strangers baad me.
+- X pe rote hue mat post karo ("day 12 of building..."), VALUE post karo:
+  demo video (30 sec) + problem + link. Video > text, hamesha.
+- Jo project 2 week me 20 real users na laaye, usko maar do aur aage badho.
+  5 me se 1 chalega — wahi jeet hai.
+- Skills order: ye 5 banate-banate Node + Python + Pillow + Render + growth
+  loops pakke ho jayenge. Phir bada project sochna.
