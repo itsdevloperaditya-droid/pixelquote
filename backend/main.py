@@ -169,6 +169,16 @@ def health():
     return {"status": "ok", "app": APP_NAME, "canvas": CANVAS_SIZE}
 
 
+@app.get("/")
+def root():
+    return {
+        "status": "ok",
+        "app": APP_NAME,
+        "message": "PixelQuote API is running 🚀",
+        "try": ["/api/health", "/api/themes"],
+    }
+
+
 @app.get("/api/themes")
 def themes():
     return {

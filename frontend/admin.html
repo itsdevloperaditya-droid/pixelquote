@@ -57,7 +57,7 @@
   </main>
 
 <script>
-const PROD_API = ""; // deploy ke baad Render backend URL yahan bhi daal (app.js me bhi)
+const PROD_API = "https://pixelquote-backend.onrender.com"; // deploy ke baad Render backend URL yahan bhi daal (app.js me bhi)
 const API = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
   ? "http://127.0.0.1:8000" : PROD_API;
 let ADMIN_PW = sessionStorage.getItem("pq_admin") || "";

@@ -4,7 +4,7 @@ const canvas = $("canvas");
 const ctx = canvas.getContext("2d");
 // Python backend URL — local me direct, online (deploy) me PROD_API.
 // DEPLOY KE BAAD: apna Render backend URL yahan daal, e.g. "https://pixelquote-api.onrender.com"
-const PROD_API = "";
+const PROD_API = "https://pixelquote-backend.onrender.com";
 const LOCAL_API = "http://127.0.0.1:8000";
 const API_DIRECT =
   location.hostname === "localhost" || location.hostname === "127.0.0.1" ? LOCAL_API : PROD_API;
