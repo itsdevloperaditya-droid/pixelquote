@@ -1,0 +1,19 @@
+{
+  "name": "micro-sass",
+  "version": "1.0.0",
+  "description": "PixelQuote Text-to-Graphic Generator — Node web + Python Pillow API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "backend": "python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000",
+    "web": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PixelQuote — Text-to-Graphic Generator</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="bg-orbs"><span></span><span></span></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🎨</div>
+      <div>
+        <h1>PixelQuote</h1>
+        <p>Text-to-Graphic Generator · Micro-SaaS</p>
+      </div>
+    </div>
+    <div class="top-meta">
+      <span class="pill">1080 × 1080 · 1:1</span>
+      <span class="pill ghost">Instagram · LinkedIn · X</span>
+      <span class="pill live" id="apiStatus">● connecting…</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ============ CONTROL PANEL ============ -->
+    <section class="panel controls">
+      <div class="card">
+        <h2><span class="step">1</span> Your content</h2>
+        <textarea id="textInput" maxlength="280" rows="4">Small steps every day compound into massive results. Start before you're ready.</textarea>
+        <div class="row-between">
+          <small class="muted">Like a tweet — keep it punchy.</small>
+          <small class="muted"><b id="charCount">0</b>/280</small>
+        </div>
+        <div class="charbar"><div id="charFill"></div></div>
+
+        <label class="toggle-row">
+          <span>Show author details</span>
+          <button id="authorToggle" class="switch on" role="switch" aria-checked="true"><span></span></button>
+        </label>
+
+        <div class="grid2" id="authorFields">
+          <div>
+            <label>Author name</label>
+            <input id="authorName" maxlength="40" value="Alex Morgan" placeholder="Alex Morgan" />
+          </div>
+          <div>
+            <label>Username / handle</label>
+            <input id="handle" maxlength="40" value="@alexbuilds" placeholder="@yourname" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="step">2</span> Style</h2>
+        <p class="muted">Pick a theme:</p>
+        <div class="theme-grid" id="themeGrid">
+          <!-- 14 themes load here automatically from Python API -->
+        </div>
+
+        <div class="row-between slider-head">
+          <label for="fontSize">Font size</label>
+          <b id="fontVal">62px</b>
+        </div>
+        <input type="range" id="fontSize" min="36" max="110" value="62" step="2" />
+        <p class="muted small">Adjust manually if text is too long or short.</p>
+
+        <div class="note">💧 <b>Free plan:</b> tiny “Made with PixelQuote” watermark. Pro (soon) removes it + unlocks 🔒 themes.</div>
+      </div>
+    </section>
+
+    <!-- ============ LIVE PREVIEW ============ -->
+    <section class="panel preview">
+      <div class="card preview-card">
+        <h2><span class="step">3</span> Live preview &amp; export</h2>
+        <p class="muted">Canvas: <b>1080 × 1080</b> (1:1) · Theme: <b id="activeTheme">Tech Dark</b> · updates as you type</p>
+        <div class="canvas-wrap">
+          <canvas id="canvas" width="1080" height="1080"></canvas>
+        </div>
+        <div class="btn-row">
+          <button id="downloadBtn" class="cta">⬇️ Download Image (.png)</button>
+          <button id="copyBtn" class="ghost-btn">Copy text</button>
+        </div>
+        <button id="rmWmBtn" class="rmwm">✨ Remove watermark FREE — 1 click!</button>
+        <p class="muted small" id="dlHint">HD export is rendered by Python (Pillow) at full 1080p. Instant preview is drawn in your browser.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>Built with HTML + CSS + JS · Python (Pillow) · Node.js · $0 running cost · PixelQuote MVP · <a href="admin.html" class="admin-link">📊 Owner stats</a></footer>
+
+  <!-- Review modal (watermark removal: sirf naam + stars, kuch aur nahi) -->
+
+  <!-- Pro / referral modal -->
+  <div class="modal-backdrop" id="proModal" hidden>
+    <div class="modal">
+      <h3>🔓 <b id="proThemeName">Sunset Glow</b> FREE me unlock kar!</h3>
+      <p>Apna link <b>2 doston</b> ko WhatsApp pe bhej. Jaise hi dono link kholenge, ye style <b>hamesha ke liye free</b>! 🎉</p>
+      <div class="ref-progress">
+        <div class="row-between"><b id="refCount">0/2 dost aaye</b><small class="muted">auto-check hota rahega</small></div>
+        <div class="charbar"><div id="refFill"></div></div>
+      </div>
+      <div class="ref-link-row">
+        <input id="refLink" readonly value="link ban raha hai…" />
+        <button id="copyRef" class="ghost-btn">Copy link</button>
+      </div>
+      <button id="waShare" class="wa-btn">📲 WhatsApp pe share kar</button>
+      <div class="info">Tip: ye link dost ke phone me khulna chahiye. Localhost link sirf is PC pe khulenge — doston ke liye app ko online deploy karna hoga.</div>
+      <button id="proClose" class="cta">Baad me karunga</button>
+    </div>
+  </div>
+
+  <!-- Review modal: watermark removal ke liye SIRF naam + stars -->
+  <div class="modal-backdrop" id="reviewModal" hidden>
+    <div class="modal">
+      <h3>✨ Watermark hatao — bilkul FREE!</h3>
+      <p>Bas apna <b>naam</b> likho aur <b>stars</b> do.<br><small class="muted">No email, no phone, no password. 🙏</small></p>
+      <label class="fld">Tumhara naam</label>
+      <input id="revName" maxlength="30" placeholder="e.g. Rahul" />
+      <label class="fld">App ko kitne stars?</label>
+      <div class="stars" id="revStars">
+        <button data-s="1">★</button><button data-s="2">★</button><button data-s="3">★</button><button data-s="4">★</button><button data-s="5">★</button>
+      </div>
+      <button id="revSubmit" class="cta">Submit & Remove watermark ✅</button>
+      <button id="revClose" class="ghost-btn full">Close</button>
+    </div>
+  </div>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PixelQuote — Owner Stats 📊</title>
+<link rel="stylesheet" href="styles.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">📊</div>
+      <div><h1>Owner Stats</h1><p>PixelQuote analytics + reviews (sirf tumhare liye)</p></div>
+    </div>
+    <div class="top-meta"><a href="index.html" class="pill ghost" style="text-decoration:none">← Back to app</a></div>
+  </header>
+
+  <main class="layout" style="grid-template-columns:1fr;max-width:1000px">
+    <section class="panel">
+      <div class="card" id="lockCard">
+        <h2><span class="step">🔒</span> Owner login</h2>
+        <p class="muted">Ye page sirf owner ke liye hai. Password daalo:</p>
+        <div class="ref-link-row">
+          <input id="adminPw" type="password" placeholder="Admin password" autocomplete="off" />
+          <button id="unlockBtn" class="cta" style="flex:0 0 auto;padding:12px 22px">Unlock</button>
+        </div>
+        <p id="lockErr" style="color:#f87171;font-weight:700"></p>
+      </div>
+      <div id="statsWrap" hidden>
+      <div class="card">
+        <h2><span class="step">📈</span> Overview <small class="muted" id="refreshNote"></small></h2>
+        <div class="stat-grid">
+          <div class="stat"><b id="sVisitors">–</b><span>Unique visitors</span></div>
+          <div class="stat"><b id="sViews">–</b><span>Page views</span></div>
+          <div class="stat"><b id="sDl">–</b><span>Images downloaded</span></div>
+          <div class="stat"><b id="sRev">–</b><span>Reviews (⭐ <span id="sAvg">–</span>)</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="step">🎨</span> Downloads by theme</h2>
+        <div id="themeTable"><p class="muted">Loading…</p></div>
+      </div>
+
+      <div class="card">
+        <h2><span class="step">⭐</span> Reviews (naam + stars — permanent DB me saved)</h2>
+        <div id="reviewTable"><p class="muted">Loading…</p></div>
+      </div>
+
+      <div class="card">
+        <h2><span class="step">🕵️</span> Recent activity (latest 100)</h2>
+        <div id="eventTable"><p class="muted">Loading…</p></div>
+      </div>
+      </div>
+    </section>
+  </main>
+
+<script>
+const PROD_API = ""; // deploy ke baad Render backend URL yahan bhi daal (app.js me bhi)
+const API = (location.hostname === "localhost" || location.hostname === "127.0.0.1")
+  ? "http://127.0.0.1:8000" : PROD_API;
+let ADMIN_PW = sessionStorage.getItem("pq_admin") || "";
+async function getStats() {
+  const opts = { cache: "no-store", headers: { "X-Admin-Password": ADMIN_PW } };
+  try {
+    const r = await fetch(`${API}/api/stats`, opts);
+    if (r.ok) return r.json();
+    if (r.status === 401) throw new Error("unauthorized");
+  } catch (e) { if (e.message === "unauthorized") throw e; }
+  const r2 = await fetch("/api/stats", opts);
+  if (r2.status === 401) throw new Error("unauthorized");
+  return r2.json();
+}
+async function tryUnlock(showErr) {
+  try {
+    await getStats(); // password check
+    sessionStorage.setItem("pq_admin", ADMIN_PW);
+    document.getElementById("lockCard").hidden = true;
+    document.getElementById("statsWrap").hidden = false;
+    loadStats();
+  } catch {
+    if (showErr) document.getElementById("lockErr").textContent = "❌ Galat password!";
+  }
+}
+function esc(s) { return String(s ?? "").replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function table(rows, cols) {
+  if (!rows.length) return '<p class="muted">Abhi kuch nahi — pehla user aane do! 🚀</p>';
+  let h = "<table class='data'><tr>" + cols.map((c) => `<th>${c[1]}</th>`).join("") + "</tr>";
+  for (const r of rows) h += "<tr>" + cols.map((c) => `<td>${esc(typeof c[0] === "function" ? c[0](r) : r[c[0]])}</td>`).join("") + "</tr>";
+  return h + "</table>";
+}
+async function loadStats() {
+  try {
+    const d = await getStats();
+    document.getElementById("sVisitors").textContent = d.visitors;
+    document.getElementById("sViews").textContent = d.page_views;
+    document.getElementById("sDl").textContent = d.downloads;
+    document.getElementById("sRev").textContent = d.reviews_count;
+    document.getElementById("sAvg").textContent = d.avg_stars;
+    document.getElementById("themeTable").innerHTML = table(d.downloads_by_theme, [["theme", "Theme"], ["downloads", "Downloads"]]);
+    document.getElementById("reviewTable").innerHTML = table(d.reviews, [["ts", "Time"], ["name", "Naam"], [(r) => "⭐".repeat(r.stars) + ` (${r.stars})`, "Stars"]]);
+    document.getElementById("eventTable").innerHTML = table(d.recent_events, [["ts", "Time"], [(r) => (r.visitor || "?").slice(0, 8) + "…", "Visitor"], ["event", "Kya kiya"], [(r) => { try { const m = JSON.parse(r.meta || "{}"); return m.theme ? m.theme + (m.chars ? ` (${m.chars} chars)` : "") : (m.stars ? m.stars + " stars" : "–"); } catch { return "–"; } }, "Detail"]]);
+    document.getElementById("refreshNote").textContent = "· auto-refresh har 10 sec";
+    setInterval(async () => {
+      try {
+        const d2 = await getStats();
+        document.getElementById("sVisitors").textContent = d2.visitors;
+        document.getElementById("sViews").textContent = d2.page_views;
+        document.getElementById("sDl").textContent = d2.downloads;
+      } catch {}
+    }, 10000);
+  } catch {
+    document.getElementById("themeTable").innerHTML = '<p class="muted">Backend se connect nahi ho paya. App chal rahi hai? (npm start)</p>';
+  }
+}
+document.getElementById("unlockBtn").addEventListener("click", () => {
+  ADMIN_PW = document.getElementById("adminPw").value;
+  tryUnlock(true);
+});
+document.getElementById("adminPw").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") { ADMIN_PW = e.target.value; tryUnlock(true); }
+});
+if (ADMIN_PW) tryUnlock(false); // tab me pehle se unlocked tha to seedha kholo
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+streamlit>=1.32
+Pillow>=10.0
+fastapi>=0.110
+uvicorn>=0.29
+python-multipart>=0.0.9
+pydantic>=2.0
