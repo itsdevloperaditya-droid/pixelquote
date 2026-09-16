@@ -24,10 +24,13 @@ referral-unlock + review-unlock + email-less waitlist style growth. Hinglish me 
 - `app.py` — purana Streamlit demo (legacy, 4 themes). Asli app webapp hai.
 
 ## Features (done)
-14 themes (6 free: Tech Dark, Minimal Light, Ocean Depth, Cream Paper, Charcoal,
-Lavender Mist / 8 Pro: Sunset Glow, Neon Matrix, Royal Gold, Forest Pine, Crimson,
-Mono Ink, Midnight, Peach Glow). Theme grid `/api/themes` se dynamic banta hai.
-Pro unlock = KOI 1 task → SAARE 8 Pro unlock (not single theme). Task A: referral
+36 themes in 9 categories x 4 (Minimal, Modern, Gaming, Professional, Beautiful,
+Traditional, Poetry, Technical, Nature). 21 free + 15 Pro (~40%). Poetry themes
+use italic serif (backend get_font italic flag + canvas italic). Frames: neon /
+light / accent inset. Theme grid `/api/themes` se dynamic banta hai (pro+cat flags),
+category filter chips + slim scrollbar. Naya theme = THEMES dict + THEME_CATS +
+THEME_STYLE entry, baaki auto (unlock/stats/grid).
+Pro unlock = KOI 1 task → SAARE Pro unlock (not single theme). Task A: referral
 (?ref=CODE, 1 unique visit kaafi, backend count, REFS_NEEDED=1). Task B: X follow
 button (x.com/devcoderaditya) + "I Followed" honor-system (X API paid hai, free
 verify impossible). Unlocks permanent: `unlocks` table (visitor PK) + referral

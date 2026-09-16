@@ -10,7 +10,7 @@ from fastapi import FastAPI, Response, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from .generator import THEMES, render_graphic, CANVAS_SIZE, APP_NAME
+from .generator import THEMES, THEME_CATS, render_graphic, CANVAS_SIZE, APP_NAME
 
 app = FastAPI(title=f"{APP_NAME} API", version="1.0.0")
 
@@ -189,7 +189,8 @@ def root():
 @app.get("/api/themes")
 def themes():
     return {
-        name: {"description": m["description"], "pro": m["pro"]}
+        name: {"description": m["description"], "pro": m["pro"],
+               "cat": THEME_CATS.get(name, "Modern")}
         for name, m in THEMES.items()
     }
 

@@ -162,10 +162,283 @@ THEMES = {
         "serif": False,
         "frame": None,
     },
+    # ---------------- batch 2: category expansion (22 new) ----------------
+    "Stone": {
+        "description": "Warm gray solid, calm minimal",
+        "pro": False,
+        "gradient": None,
+        "solid": (231, 229, 228),
+        "text_color": (41, 37, 36),
+        "sub_color": (120, 113, 108),
+        "accent": (87, 83, 78),
+        "serif": False,
+        "frame": None,
+    },
+    "Aurora": {
+        "description": "Teal to violet aurora gradient",
+        "pro": True,
+        "gradient": [(19, 78, 74), (109, 40, 217)],
+        "solid": None,
+        "text_color": (255, 255, 255),
+        "sub_color": (153, 246, 228),
+        "accent": (94, 234, 212),
+        "serif": False,
+        "frame": None,
+    },
+    "Arcade": {
+        "description": "Retro arcade cabinet, hot yellow frame",
+        "pro": False,
+        "gradient": None,
+        "solid": (26, 16, 51),
+        "text_color": (254, 252, 232),
+        "sub_color": (250, 204, 21),
+        "accent": (250, 204, 21),
+        "serif": False,
+        "frame": "accent",
+    },
+    "Bloodzone": {
+        "description": "Black-red intense gaming",
+        "pro": True,
+        "gradient": None,
+        "solid": (10, 10, 10),
+        "text_color": (254, 226, 226),
+        "sub_color": (239, 68, 68),
+        "accent": (220, 38, 38),
+        "serif": False,
+        "frame": "accent",
+    },
+    "Venom": {
+        "description": "Toxic purple to green gradient",
+        "pro": False,
+        "gradient": [(59, 7, 100), (5, 46, 22)],
+        "solid": None,
+        "text_color": (245, 243, 255),
+        "sub_color": (163, 230, 53),
+        "accent": (163, 230, 53),
+        "serif": False,
+        "frame": None,
+    },
+    "Executive": {
+        "description": "Classic navy, premium serif",
+        "pro": False,
+        "gradient": None,
+        "solid": (30, 58, 95),
+        "text_color": (255, 255, 255),
+        "sub_color": (191, 219, 254),
+        "accent": (226, 232, 240),
+        "serif": True,
+        "frame": None,
+    },
+    "Rose": {
+        "description": "Soft rose gradient, romantic serif",
+        "pro": False,
+        "gradient": [(255, 241, 242), (254, 205, 211)],
+        "solid": None,
+        "text_color": (136, 19, 55),
+        "sub_color": (190, 18, 60),
+        "accent": (225, 29, 72),
+        "serif": True,
+        "frame": None,
+    },
+    "Sky": {
+        "description": "Clear sky blue gradient, fresh",
+        "pro": False,
+        "gradient": [(224, 242, 254), (186, 230, 253)],
+        "solid": None,
+        "text_color": (12, 74, 110),
+        "sub_color": (2, 132, 199),
+        "accent": (2, 132, 199),
+        "serif": False,
+        "frame": None,
+    },
+    "Marigold": {
+        "description": "Festive marigold cream, gold frame",
+        "pro": False,
+        "gradient": None,
+        "solid": (255, 251, 235),
+        "text_color": (124, 45, 18),
+        "sub_color": (180, 83, 9),
+        "accent": (217, 119, 6),
+        "serif": True,
+        "frame": "accent",
+    },
+    "Henna": {
+        "description": "Mehendi green, festive cream text",
+        "pro": False,
+        "gradient": None,
+        "solid": (54, 83, 20),
+        "text_color": (254, 252, 232),
+        "sub_color": (217, 249, 157),
+        "accent": (190, 242, 100),
+        "serif": False,
+        "frame": None,
+    },
+    "Diwali Night": {
+        "description": "Diya glow, purple night to ember",
+        "pro": True,
+        "gradient": [(46, 16, 101), (124, 45, 18)],
+        "solid": None,
+        "text_color": (254, 243, 199),
+        "sub_color": (252, 211, 77),
+        "accent": (251, 191, 36),
+        "serif": True,
+        "frame": "accent",
+    },
+    "Ink & Paper": {
+        "description": "Ink italic serif on soft paper",
+        "pro": False,
+        "gradient": None,
+        "solid": (253, 252, 248),
+        "text_color": (32, 26, 23),
+        "sub_color": (87, 83, 78),
+        "accent": (68, 64, 60),
+        "serif": True,
+        "italic": True,
+        "frame": None,
+    },
+    "Old Letter": {
+        "description": "Vintage sepia letter, italic serif",
+        "pro": False,
+        "gradient": None,
+        "solid": (239, 230, 213),
+        "text_color": (74, 47, 29),
+        "sub_color": (138, 109, 79),
+        "accent": (146, 64, 14),
+        "serif": True,
+        "italic": True,
+        "frame": "accent",
+    },
+    "Gulab": {
+        "description": "Deep rose gradient, ishq italic serif",
+        "pro": True,
+        "gradient": [(76, 5, 25), (157, 23, 77)],
+        "solid": None,
+        "text_color": (255, 241, 242),
+        "sub_color": (253, 164, 175),
+        "accent": (251, 113, 133),
+        "serif": True,
+        "italic": True,
+        "frame": None,
+    },
+    "Midnight Shayari": {
+        "description": "Indigo night, silver italic serif",
+        "pro": True,
+        "gradient": None,
+        "solid": (49, 46, 129),
+        "text_color": (226, 232, 240),
+        "sub_color": (165, 180, 252),
+        "accent": (196, 181, 253),
+        "serif": True,
+        "italic": True,
+        "frame": "accent",
+    },
+    "Terminal Amber": {
+        "description": "Amber terminal on warm black",
+        "pro": False,
+        "gradient": None,
+        "solid": (12, 10, 9),
+        "text_color": (254, 243, 199),
+        "sub_color": (251, 191, 36),
+        "accent": (245, 158, 11),
+        "serif": False,
+        "frame": "accent",
+    },
+    "Blueprint": {
+        "description": "Engineer blueprint blue, thin frame",
+        "pro": False,
+        "gradient": None,
+        "solid": (30, 64, 175),
+        "text_color": (255, 255, 255),
+        "sub_color": (191, 219, 254),
+        "accent": (219, 234, 254),
+        "serif": False,
+        "frame": "light",
+    },
+    "Carbon": {
+        "description": "Code-editor dark, orange accents",
+        "pro": True,
+        "gradient": [(17, 24, 39), (3, 7, 18)],
+        "solid": None,
+        "text_color": (243, 244, 246),
+        "sub_color": (251, 146, 60),
+        "accent": (249, 115, 22),
+        "serif": False,
+        "frame": None,
+    },
+    "Mono Light": {
+        "description": "Light code theme, clean slate",
+        "pro": False,
+        "gradient": None,
+        "solid": (248, 250, 252),
+        "text_color": (15, 23, 42),
+        "sub_color": (100, 116, 139),
+        "accent": (14, 165, 233),
+        "serif": False,
+        "frame": None,
+    },
+    "Desert": {
+        "description": "Warm desert sand gradient",
+        "pro": False,
+        "gradient": [(254, 243, 199), (253, 186, 116)],
+        "solid": None,
+        "text_color": (69, 26, 3),
+        "sub_color": (154, 52, 18),
+        "accent": (194, 65, 12),
+        "serif": False,
+        "frame": None,
+    },
+    "Glacier": {
+        "description": "Glacier ice cyan, calm",
+        "pro": False,
+        "gradient": [(236, 254, 255), (207, 250, 254)],
+        "solid": None,
+        "text_color": (22, 78, 99),
+        "sub_color": (14, 116, 144),
+        "accent": (6, 182, 212),
+        "serif": False,
+        "frame": None,
+    },
+    "Sakura Night": {
+        "description": "Night blossom, purple to magenta",
+        "pro": True,
+        "gradient": [(59, 7, 100), (131, 24, 67)],
+        "solid": None,
+        "text_color": (252, 231, 243),
+        "sub_color": (249, 168, 212),
+        "accent": (244, 114, 182),
+        "serif": True,
+        "frame": None,
+    },
+}
+
+THEME_CATS = {
+    "Minimal Light": "Minimal", "Mono Ink": "Minimal",
+    "Cream Paper": "Minimal", "Stone": "Minimal",
+    "Tech Dark": "Modern", "Ocean Depth": "Modern",
+    "Lavender Mist": "Modern", "Aurora": "Modern",
+    "Neon Matrix": "Gaming", "Arcade": "Gaming",
+    "Bloodzone": "Gaming", "Venom": "Gaming",
+    "Charcoal": "Professional", "Midnight": "Professional",
+    "Executive": "Professional", "Crimson": "Professional",
+    "Sunset Glow": "Beautiful", "Peach Glow": "Beautiful",
+    "Rose": "Beautiful", "Sky": "Beautiful",
+    "Royal Gold": "Traditional", "Marigold": "Traditional",
+    "Henna": "Traditional", "Diwali Night": "Traditional",
+    "Ink & Paper": "Poetry", "Old Letter": "Poetry",
+    "Gulab": "Poetry", "Midnight Shayari": "Poetry",
+    "Terminal Amber": "Technical", "Blueprint": "Technical",
+    "Carbon": "Technical", "Mono Light": "Technical",
+    "Forest Pine": "Nature", "Desert": "Nature",
+    "Glacier": "Nature", "Sakura Night": "Nature",
 }
 
 
-def _candidate_fonts(serif: bool, bold: bool):
+def _candidate_fonts(serif: bool, bold: bool, italic: bool = False):
+    if serif and italic:
+        return [
+            "C:/Windows/Fonts/georgiaz.ttf" if bold else "C:/Windows/Fonts/georgiai.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf",
+        ]
     if serif:
         return [
             "C:/Windows/Fonts/georgiab.ttf" if bold else "C:/Windows/Fonts/georgia.ttf",
@@ -178,7 +451,7 @@ def _candidate_fonts(serif: bool, bold: bool):
     ]
 
 
-def get_font(size: int, serif: bool = False, bold: bool = False):
+def get_font(size: int, serif: bool = False, bold: bool = False, italic: bool = False):
     for path in _candidate_fonts(serif, bold):
         if Path(path).exists():
             try:
@@ -261,7 +534,8 @@ def render_graphic(text: str, author_name: str = "", handle: str = "",
         draw.rounded_rectangle([48, 48, S - 48, S - 48], radius=20, outline=theme["accent"], width=5)
 
     serif = theme["serif"]
-    main_font = get_font(font_size, serif=serif, bold=True)
+    italic = theme.get("italic", False)
+    main_font = get_font(font_size, serif=serif, bold=True, italic=italic)
     quote_font = get_font(180, serif=True, bold=True)
     author_font = get_font(44, serif=False, bold=True)
     handle_font = get_font(38, serif=False, bold=False)
@@ -290,7 +564,7 @@ def render_graphic(text: str, author_name: str = "", handle: str = "",
 
     while total_h > 560 and font_size > 32:
         font_size -= 4
-        main_font = get_font(font_size, serif=serif, bold=True)
+        main_font = get_font(font_size, serif=serif, bold=True, italic=italic)
         lines = wrap_lines(display_text, draw, main_font, max_w)
         line_heights, line_widths = [], []
         for ln in lines:

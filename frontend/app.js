@@ -22,23 +22,53 @@ function track(event, meta) {
   fetch(`${API_DIRECT}/api/track`, opts).catch(() => fetch("/api/track", opts).catch(() => {}));
 }
 
+const CATS = ["Minimal", "Modern", "Gaming", "Professional", "Beautiful", "Traditional", "Poetry", "Technical", "Nature"];
 const THEME_STYLE = {
-  // ---- FREE (6) ----
-  "Tech Dark":     { g: ["#1e1b4b", "#6d28d9"], text: "#ffffff", sub: "#cbd5e1", accent: "#a78bfa", serif: false, frame: null, pro: false, tag: "purple/blue · sans", sw: "linear-gradient(180deg,#1e1b4b,#6d28d9)" },
-  "Minimal Light": { solid: "#FAF9F6", text: "#111111", sub: "#646464", accent: "#111111", serif: true, frame: "light", pro: false, tag: "off-white · serif", sw: "#FAF9F6", swBorder: "#ddd" },
-  "Ocean Depth":   { g: ["#0c4a6e", "#0e7490"], text: "#ffffff", sub: "#a5f3fc", accent: "#67e8f9", serif: false, frame: null, pro: false, tag: "navy/teal · cyan", sw: "linear-gradient(180deg,#0c4a6e,#0e7490)" },
-  "Cream Paper":   { solid: "#f5efe0", text: "#3f3226", sub: "#8a7a63", accent: "#b45309", serif: true, frame: null, pro: false, tag: "cream · coffee serif", sw: "#f5efe0", swBorder: "#ddd" },
-  "Charcoal":      { solid: "#1f2937", text: "#f9fafb", sub: "#9ca3af", accent: "#e5e7eb", serif: false, frame: null, pro: false, tag: "soft black · clean", sw: "#1f2937" },
-  "Lavender Mist": { g: ["#ede9fe", "#c4b5fd"], text: "#2e1065", sub: "#6d28d9", accent: "#7c3aed", serif: false, frame: null, pro: false, tag: "lavender · purple", sw: "linear-gradient(180deg,#ede9fe,#c4b5fd)" },
-  // ---- PRO (8) ----
-  "Sunset Glow":   { g: ["#FF512F", "#DD2476"], text: "#ffffff", sub: "#ffe4e6", accent: "#ffffff", serif: false, frame: null, pro: true, tag: "orange/pink", sw: "linear-gradient(180deg,#FF512F,#DD2476)" },
-  "Neon Matrix":   { solid: "#000000", text: "#ffffff", sub: "#39FF14", accent: "#39FF14", serif: false, frame: "neon", pro: true, tag: "black · neon green", sw: "#000000", swBorder: "#39FF14" },
-  "Royal Gold":    { g: ["#0c0a09", "#451a03"], text: "#fef3c7", sub: "#d6a94f", accent: "#fbbf24", serif: true, frame: "accent", pro: true, tag: "black-gold · luxury", sw: "linear-gradient(180deg,#0c0a09,#b45309)" },
-  "Forest Pine":   { g: ["#052e16", "#166534"], text: "#f0fdf4", sub: "#bbf7d0", accent: "#4ade80", serif: false, frame: null, pro: true, tag: "deep green · mint", sw: "linear-gradient(180deg,#052e16,#166534)" },
-  "Crimson":       { g: ["#450a0a", "#b91c1c"], text: "#ffffff", sub: "#fecaca", accent: "#fca5a5", serif: true, frame: null, pro: true, tag: "maroon · bold serif", sw: "linear-gradient(180deg,#450a0a,#b91c1c)" },
-  "Mono Ink":      { solid: "#ffffff", text: "#000000", sub: "#525252", accent: "#000000", serif: false, frame: "accent", pro: true, tag: "editorial · framed", sw: "#ffffff", swBorder: "#333" },
-  "Midnight":      { solid: "#020617", text: "#e2e8f0", sub: "#38bdf8", accent: "#38bdf8", serif: false, frame: "accent", pro: true, tag: "black-blue · sky", sw: "#020617", swBorder: "#38bdf8" },
-  "Peach Glow":    { g: ["#ffedd5", "#f9a8d4"], text: "#431407", sub: "#9a3412", accent: "#ea580c", serif: false, frame: null, pro: true, tag: "peach/pink · warm", sw: "linear-gradient(180deg,#ffedd5,#f9a8d4)" },
+  // ---- MINIMAL ----
+  "Minimal Light": { solid: "#FAF9F6", text: "#111111", sub: "#646464", accent: "#111111", serif: true, frame: "light", pro: false, cat: "Minimal", tag: "off-white · serif", sw: "#FAF9F6", swBorder: "#ddd" },
+  "Mono Ink":      { solid: "#ffffff", text: "#000000", sub: "#525252", accent: "#000000", serif: false, frame: "accent", pro: true, cat: "Minimal", tag: "editorial · framed", sw: "#ffffff", swBorder: "#333" },
+  "Cream Paper":   { solid: "#f5efe0", text: "#3f3226", sub: "#8a7a63", accent: "#b45309", serif: true, frame: null, pro: false, cat: "Minimal", tag: "cream · coffee serif", sw: "#f5efe0", swBorder: "#ddd" },
+  "Stone":         { solid: "#e7e5e4", text: "#292524", sub: "#78716c", accent: "#57534e", serif: false, frame: null, pro: false, cat: "Minimal", tag: "warm gray · calm", sw: "#e7e5e4", swBorder: "#d6d3d1" },
+  // ---- MODERN ----
+  "Tech Dark":     { g: ["#1e1b4b", "#6d28d9"], text: "#ffffff", sub: "#cbd5e1", accent: "#a78bfa", serif: false, frame: null, pro: false, cat: "Modern", tag: "purple/blue · sans", sw: "linear-gradient(180deg,#1e1b4b,#6d28d9)" },
+  "Ocean Depth":   { g: ["#0c4a6e", "#0e7490"], text: "#ffffff", sub: "#a5f3fc", accent: "#67e8f9", serif: false, frame: null, pro: false, cat: "Modern", tag: "navy/teal · cyan", sw: "linear-gradient(180deg,#0c4a6e,#0e7490)" },
+  "Lavender Mist": { g: ["#ede9fe", "#c4b5fd"], text: "#2e1065", sub: "#6d28d9", accent: "#7c3aed", serif: false, frame: null, pro: false, cat: "Modern", tag: "lavender · purple", sw: "linear-gradient(180deg,#ede9fe,#c4b5fd)" },
+  "Aurora":        { g: ["#134e4a", "#6d28d9"], text: "#ffffff", sub: "#99f6e4", accent: "#5eead4", serif: false, frame: null, pro: true, cat: "Modern", tag: "aurora · teal violet", sw: "linear-gradient(180deg,#134e4a,#6d28d9)" },
+  // ---- GAMING ----
+  "Neon Matrix":   { solid: "#000000", text: "#ffffff", sub: "#39FF14", accent: "#39FF14", serif: false, frame: "neon", pro: true, cat: "Gaming", tag: "black · neon green", sw: "#000000", swBorder: "#39FF14" },
+  "Arcade":        { solid: "#1a1033", text: "#fefce8", sub: "#facc15", accent: "#facc15", serif: false, frame: "accent", pro: false, cat: "Gaming", tag: "retro arcade · yellow", sw: "#1a1033", swBorder: "#facc15" },
+  "Bloodzone":     { solid: "#0a0a0a", text: "#fee2e2", sub: "#ef4444", accent: "#dc2626", serif: false, frame: "accent", pro: true, cat: "Gaming", tag: "black-red · intense", sw: "#0a0a0a", swBorder: "#dc2626" },
+  "Venom":         { g: ["#3b0764", "#052e16"], text: "#f5f3ff", sub: "#a3e635", accent: "#a3e635", serif: false, frame: null, pro: false, cat: "Gaming", tag: "toxic · purple green", sw: "linear-gradient(180deg,#3b0764,#052e16)" },
+  // ---- PROFESSIONAL ----
+  "Charcoal":      { solid: "#1f2937", text: "#f9fafb", sub: "#9ca3af", accent: "#e5e7eb", serif: false, frame: null, pro: false, cat: "Professional", tag: "soft black · clean", sw: "#1f2937" },
+  "Midnight":      { solid: "#020617", text: "#e2e8f0", sub: "#38bdf8", accent: "#38bdf8", serif: false, frame: "accent", pro: true, cat: "Professional", tag: "black-blue · sky", sw: "#020617", swBorder: "#38bdf8" },
+  "Executive":     { solid: "#1e3a5f", text: "#ffffff", sub: "#bfdbfe", accent: "#e2e8f0", serif: true, frame: null, pro: false, cat: "Professional", tag: "navy · classic serif", sw: "#1e3a5f" },
+  "Crimson":       { g: ["#450a0a", "#b91c1c"], text: "#ffffff", sub: "#fecaca", accent: "#fca5a5", serif: true, frame: null, pro: true, cat: "Professional", tag: "bold maroon · serif", sw: "linear-gradient(180deg,#450a0a,#b91c1c)" },
+  // ---- BEAUTIFUL ----
+  "Sunset Glow":   { g: ["#FF512F", "#DD2476"], text: "#ffffff", sub: "#ffe4e6", accent: "#ffffff", serif: false, frame: null, pro: true, cat: "Beautiful", tag: "orange/pink", sw: "linear-gradient(180deg,#FF512F,#DD2476)" },
+  "Peach Glow":    { g: ["#ffedd5", "#f9a8d4"], text: "#431407", sub: "#9a3412", accent: "#ea580c", serif: false, frame: null, pro: true, cat: "Beautiful", tag: "peach/pink · warm", sw: "linear-gradient(180deg,#ffedd5,#f9a8d4)" },
+  "Rose":          { g: ["#fff1f2", "#fecdd3"], text: "#881337", sub: "#be123c", accent: "#e11d48", serif: true, frame: null, pro: false, cat: "Beautiful", tag: "soft rose · romantic", sw: "linear-gradient(180deg,#fff1f2,#fecdd3)" },
+  "Sky":           { g: ["#e0f2fe", "#bae6fd"], text: "#0c4a6e", sub: "#0284c7", accent: "#0284c7", serif: false, frame: null, pro: false, cat: "Beautiful", tag: "clear sky · fresh", sw: "linear-gradient(180deg,#e0f2fe,#bae6fd)" },
+  // ---- TRADITIONAL ----
+  "Royal Gold":    { g: ["#0c0a09", "#451a03"], text: "#fef3c7", sub: "#d6a94f", accent: "#fbbf24", serif: true, frame: "accent", pro: true, cat: "Traditional", tag: "black-gold · luxury", sw: "linear-gradient(180deg,#0c0a09,#b45309)" },
+  "Marigold":      { solid: "#fffbeb", text: "#7c2d12", sub: "#b45309", accent: "#d97706", serif: true, frame: "accent", pro: false, cat: "Traditional", tag: "festive · marigold", sw: "#fffbeb", swBorder: "#d97706" },
+  "Henna":         { solid: "#365314", text: "#fefce8", sub: "#d9f99d", accent: "#bef264", serif: false, frame: null, pro: false, cat: "Traditional", tag: "mehendi green", sw: "#365314" },
+  "Diwali Night":  { g: ["#2e1065", "#7c2d12"], text: "#fef3c7", sub: "#fcd34d", accent: "#fbbf24", serif: true, frame: "accent", pro: true, cat: "Traditional", tag: "diya glow · festive", sw: "linear-gradient(180deg,#2e1065,#7c2d12)" },
+  // ---- POETRY (italic serif) ----
+  "Ink & Paper":      { solid: "#fdfcf8", text: "#201a17", sub: "#57534e", accent: "#44403c", serif: true, italic: true, frame: null, pro: false, cat: "Poetry", tag: "ink · italic shayari", sw: "#fdfcf8", swBorder: "#d6d3d1" },
+  "Old Letter":       { solid: "#efe6d5", text: "#4a2f1d", sub: "#8a6d4f", accent: "#92400e", serif: true, italic: true, frame: "accent", pro: false, cat: "Poetry", tag: "vintage · sepia", sw: "#efe6d5", swBorder: "#92400e" },
+  "Gulab":            { g: ["#4c0519", "#9d174d"], text: "#fff1f2", sub: "#fda4af", accent: "#fb7185", serif: true, italic: true, frame: null, pro: true, cat: "Poetry", tag: "deep rose · ishq", sw: "linear-gradient(180deg,#4c0519,#9d174d)" },
+  "Midnight Shayari": { solid: "#312e81", text: "#e2e8f0", sub: "#a5b4fc", accent: "#c4b5fd", serif: true, italic: true, frame: "accent", pro: true, cat: "Poetry", tag: "indigo night · shayari", sw: "#312e81", swBorder: "#c4b5fd" },
+  // ---- TECHNICAL ----
+  "Terminal Amber": { solid: "#0c0a09", text: "#fef3c7", sub: "#fbbf24", accent: "#f59e0b", serif: false, frame: "accent", pro: false, cat: "Technical", tag: "amber terminal", sw: "#0c0a09", swBorder: "#f59e0b" },
+  "Blueprint":      { solid: "#1e40af", text: "#ffffff", sub: "#bfdbfe", accent: "#dbeafe", serif: false, frame: "light", pro: false, cat: "Technical", tag: "blueprint · engineer", sw: "#1e40af" },
+  "Carbon":         { g: ["#111827", "#030712"], text: "#f3f4f6", sub: "#fb923c", accent: "#f97316", serif: false, frame: null, pro: true, cat: "Technical", tag: "code editor · orange", sw: "linear-gradient(180deg,#111827,#030712)" },
+  "Mono Light":     { solid: "#f8fafc", text: "#0f172a", sub: "#64748b", accent: "#0ea5e9", serif: false, frame: null, pro: false, cat: "Technical", tag: "light code · clean", sw: "#f8fafc", swBorder: "#cbd5e1" },
+  // ---- NATURE ----
+  "Forest Pine":   { g: ["#052e16", "#166534"], text: "#f0fdf4", sub: "#bbf7d0", accent: "#4ade80", serif: false, frame: null, pro: true, cat: "Nature", tag: "deep green · mint", sw: "linear-gradient(180deg,#052e16,#166534)" },
+  "Desert":        { g: ["#fef3c7", "#fdba74"], text: "#451a03", sub: "#9a3412", accent: "#c2410c", serif: false, frame: null, pro: false, cat: "Nature", tag: "desert sand · warm", sw: "linear-gradient(180deg,#fef3c7,#fdba74)" },
+  "Glacier":       { g: ["#ecfeff", "#cffafe"], text: "#164e63", sub: "#0e7490", accent: "#06b6d4", serif: false, frame: null, pro: false, cat: "Nature", tag: "glacier ice · calm", sw: "linear-gradient(180deg,#ecfeff,#cffafe)" },
+  "Sakura Night":  { g: ["#3b0764", "#831843"], text: "#fce7f3", sub: "#f9a8d4", accent: "#f472b6", serif: true, frame: null, pro: true, cat: "Nature", tag: "sakura night · delicate", sw: "linear-gradient(180deg,#3b0764,#831843)" },
 };
 
 function hexRGB(h) {
@@ -129,18 +159,18 @@ function render() {
   // --- main text ---
   const maxW = S - 240;
   const display = text.trim() || "Your words, beautifully styled.";
-  ctx.font = `800 ${fontSize}px ${fam}`;
+  ctx.font = `${T.italic ? "italic " : ""}800 ${fontSize}px ${fam}`;
   let lines = wrapText(display, ctx.font, maxW);
   const lh = fontSize * 1.28;
   while (lines.length * lh > 560 && fontSize > 32) {
     fontSize -= 4;
-    ctx.font = `800 ${fontSize}px ${fam}`;
+    ctx.font = `${T.italic ? "italic " : ""}800 ${fontSize}px ${fam}`;
     lines = wrapText(display, ctx.font, maxW);
   }
   const blockH = lines.length * lh;
   let y = 500 - blockH / 2 + lh * 0.38;
   ctx.fillStyle = T.text;
-  ctx.font = `800 ${fontSize}px ${fam}`;
+  ctx.font = `${T.italic ? "italic " : ""}800 ${fontSize}px ${fam}`;
   for (const ln of lines) { ctx.fillText(ln, S / 2, y); y += lh; }
 
   // --- author ---
@@ -293,30 +323,64 @@ async function refreshProgress() {
 }
 function closeRefModal() { $("proModal").hidden = true; clearInterval(ref.poll); }
 
-// theme grid builds dynamically from Python API (source of truth for Pro flags)
+// theme grid builds dynamically from Python API, grouped by category + filter chips
+function themeButton(name, isPro) {
+  const m = THEME_STYLE[name] || {};
+  const b = document.createElement("button");
+  b.className = "theme" + (isPro ? " pro" : "") + (state.theme === name ? " selected" : "");
+  b.dataset.theme = name;
+  b.dataset.cat = m.cat || "";
+  b.innerHTML = `<span class="sw" style="background:${m.sw || "#333"}${m.swBorder ? ";border:2px solid " + m.swBorder : ""}"></span>${name} ${isPro ? '<em class="pro-badge">🔒 Pro</em>' : ""}<small>${m.tag || ""}</small>`;
+  b.addEventListener("click", () => onThemeClick(name));
+  return b;
+}
+function filterCat(cat) {
+  document.querySelectorAll("#themeGrid .theme, #themeGrid .cat-head").forEach((el) => {
+    el.style.display = (cat === "All" || el.dataset.cat === cat) ? "" : "none";
+  });
+}
 async function loadThemeGrid() {
   let order = Object.keys(THEME_STYLE);
-  const proMap = {};
-  order.forEach((n) => (proMap[n] = !!THEME_STYLE[n].pro));
+  const proMap = {}, catMap = {};
+  order.forEach((n) => { proMap[n] = !!THEME_STYLE[n].pro; catMap[n] = THEME_STYLE[n].cat || "Modern"; });
   try {
-    const t = await refCall("/api/themes"); // {name: {description, pro}}
+    const t = await refCall("/api/themes"); // {name: {description, pro, cat}}
     const apiOrder = Object.keys(t).filter((n) => THEME_STYLE[n]);
     if (apiOrder.length) {
       order = apiOrder;
-      order.forEach((n) => (proMap[n] = !!t[n].pro));
+      order.forEach((n) => { proMap[n] = !!t[n].pro; if (t[n].cat) catMap[n] = t[n].cat; });
     }
   } catch {}
   PRO_THEMES = order.filter((n) => proMap[n]);
+  // filter chips
+  const chips = $("chipRow");
+  chips.innerHTML = "";
+  const mkChip = (label, cat) => {
+    const c = document.createElement("button");
+    c.className = "chip" + (cat === "All" ? " active" : "");
+    const count = cat === "All" ? order.length : order.filter((n) => catMap[n] === cat).length;
+    c.textContent = `${label} (${count})`;
+    c.addEventListener("click", () => {
+      chips.querySelectorAll(".chip").forEach((x) => x.classList.remove("active"));
+      c.classList.add("active");
+      filterCat(cat);
+    });
+    chips.appendChild(c);
+  };
+  mkChip("All", "All");
+  CATS.forEach((c) => { if (order.some((n) => catMap[n] === c)) mkChip(c, c); });
+  // grouped grid
   const grid = $("themeGrid");
   grid.innerHTML = "";
-  order.forEach((name) => {
-    const m = THEME_STYLE[name] || {};
-    const b = document.createElement("button");
-    b.className = "theme" + (proMap[name] ? " pro" : "") + (state.theme === name ? " selected" : "");
-    b.dataset.theme = name;
-    b.innerHTML = `<span class="sw" style="background:${m.sw || "#333"}${m.swBorder ? ";border:2px solid " + m.swBorder : ""}"></span>${name} ${proMap[name] ? '<em class="pro-badge">🔒 Pro</em>' : ""}<small>${m.tag || ""}</small>`;
-    b.addEventListener("click", () => onThemeClick(name));
-    grid.appendChild(b);
+  CATS.forEach((cat) => {
+    const names = order.filter((n) => catMap[n] === cat);
+    if (!names.length) return;
+    const h = document.createElement("div");
+    h.className = "cat-head";
+    h.dataset.cat = cat;
+    h.textContent = cat;
+    grid.appendChild(h);
+    names.forEach((name) => grid.appendChild(themeButton(name, proMap[name])));
   });
   paintThemes();
 }

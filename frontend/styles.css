@@ -57,6 +57,11 @@ textarea:focus,input:focus{border-color:var(--acc)}
 .switch.on{background:linear-gradient(90deg,var(--acc),var(--acc2))}
 .switch.on span{left:26px;background:#fff}
 
+.chip-row{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 8px;scrollbar-width:none}
+.chip-row::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;font-size:12px;font-weight:700;background:#0c0f16;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:7px 12px;cursor:pointer}
+.chip.active{background:linear-gradient(90deg,var(--acc),var(--acc2));color:#fff;border-color:transparent}
+.cat-head{grid-column:1/-1;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
 .theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 6px;max-height:312px;overflow-y:auto;padding-right:6px;scrollbar-width:thin;scrollbar-color:#7c3aed #0c0f16}
 .theme-grid::-webkit-scrollbar{width:6px}
 .theme-grid::-webkit-scrollbar-track{background:#0c0f16;border-radius:99px}
