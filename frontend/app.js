@@ -197,13 +197,21 @@ $("authorToggle").addEventListener("click", () => {
 
 // ---------- referral unlock (free Pro, no paid APIs) ----------
 let PRO_THEMES = Object.keys(THEME_STYLE).filter((n) => THEME_STYLE[n].pro);
-const NEEDED = 2;
+const NEEDED = 1; // sirf 1 dost kaafi hai
 const ref = {
   code: localStorage.getItem("pq_ref") || "",
   vid: localStorage.getItem("pq_vid") || "",
   unlocked: JSON.parse(localStorage.getItem("pq_unlocked") || "[]"),
+  unlockedAll: localStorage.getItem("pq_unlocked_all") === "1",
   pending: null, poll: null,
 };
+function markAllUnlocked(list) {
+  ref.unlockedAll = true;
+  ref.unlocked = list && list.length ? list : PRO_THEMES.slice();
+  localStorage.setItem("pq_unlocked_all", "1");
+  localStorage.setItem("pq_unlocked", JSON.stringify(ref.unlocked));
+  paintThemes();
+}
 if (!ref.vid) {
   ref.vid = (crypto.randomUUID ? crypto.randomUUID() : "v-" + Date.now() + "-" + Math.random().toString(16).slice(2));
   localStorage.setItem("pq_vid", ref.vid);
@@ -228,11 +236,11 @@ async function ensureCode() {
   return ref.code;
 }
 function myLink() { return location.origin + location.pathname + "?ref=" + ref.code; }
-function isUnlocked(name) { return !PRO_THEMES.includes(name) || ref.unlocked.includes(name); }
+function isUnlocked(name) { return !PRO_THEMES.includes(name) || ref.unlockedAll || ref.unlocked.includes(name); }
 function paintThemes() {
   document.querySelectorAll("#themeGrid .theme").forEach((b) => {
     const name = b.dataset.theme;
-    if (PRO_THEMES.includes(name) && ref.unlocked.includes(name)) {
+    if (PRO_THEMES.includes(name) && (ref.unlockedAll || ref.unlocked.includes(name))) {
       b.classList.remove("pro");
       const badge = b.querySelector(".pro-badge");
       if (badge) { badge.textContent = "✓ Unlocked"; badge.style.background = "#34d399"; }
@@ -246,6 +254,7 @@ async function syncUnlocked() {
     const s = await refCall("/api/referral/" + ref.code);
     ref.unlocked = s.unlocked || [];
     localStorage.setItem("pq_unlocked", JSON.stringify(ref.unlocked));
+    if (ref.unlocked.length >= PRO_THEMES.length && PRO_THEMES.length) markAllUnlocked(ref.unlocked);
     paintThemes();
   } catch {}
 }
@@ -253,7 +262,7 @@ function openRefModal(name) {
   ref.pending = name;
   $("proThemeName").textContent = name;
   $("refLink").value = ref.code ? myLink() : "link ban raha hai…";
-  $("refCount").textContent = "0/2 dost aaye";
+  $("refCount").textContent = `0/${NEEDED}`;
   $("refFill").style.width = "0%";
   $("proModal").hidden = false;
   refreshProgress();
@@ -265,17 +274,20 @@ async function refreshProgress() {
   try {
     const s = await refCall("/api/referral/" + ref.code);
     const n = Math.min(s.visits, NEEDED);
-    $("refCount").textContent = `${n}/${NEEDED} dost aaye`;
+    $("refCount").textContent = `${n}/${NEEDED}`;
     $("refFill").style.width = (n / NEEDED * 100) + "%";
     if (s.visits >= NEEDED) {
-      try { await refCall("/api/referral/unlock", { code: ref.code, theme: ref.pending }); } catch {}
+      let list = [];
+      try {
+        const u = await refCall("/api/referral/unlock", { code: ref.code, theme: ref.pending });
+        list = u.unlocked || [];
+      } catch {}
       const done = ref.pending;
-      ref.unlocked = [...new Set([...ref.unlocked, done])];
-      localStorage.setItem("pq_unlocked", JSON.stringify(ref.unlocked));
+      markAllUnlocked(list);
       state.theme = done;
       paintThemes(); render();
       closeRefModal();
-      setTimeout(() => alert(`🎉 ${done} unlock ho gaya! Ab ye hamesha free rahega.`), 300);
+      setTimeout(() => alert("🎉 SAARE 8 Pro styles unlock ho gaye! Ab sab hamesha free rahenge."), 300);
     }
   } catch {}
 }
@@ -328,6 +340,23 @@ $("copyRef").addEventListener("click", async () => {
 $("waShare").addEventListener("click", () => {
   const msg = `Bro ye app try kar — text se Instagram-ready photo banta hai, free! 👇\n${myLink()}`;
   window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
+});
+$("followedBtn").addEventListener("click", async () => {
+  const btn = $("followedBtn");
+  btn.disabled = true; btn.textContent = "Checking…";
+  try {
+    const u = await refCall("/api/social/unlock", { visitor: ref.vid });
+    markAllUnlocked(u.unlocked);
+    track("social_unlock", { method: "twitter" });
+    if (ref.pending) state.theme = ref.pending;
+    paintThemes(); render();
+    closeRefModal();
+    setTimeout(() => alert("🎉 SAARE 8 Pro styles unlock ho gaye! Thanks for following!"), 300);
+  } catch {
+    alert("Unlock nahi ho paya — app chal rahi hai na? Phir try karo.");
+  } finally {
+    btn.disabled = false; btn.textContent = "I Followed ✅";
+  }
 });
 $("proClose").addEventListener("click", closeRefModal);
 $("proModal").addEventListener("click", (e) => { if (e.target.id === "proModal") closeRefModal(); });
@@ -383,6 +412,7 @@ async function checkReviewStatus() {
   try {
     const s = await refCall("/api/status/" + ref.vid);
     state.reviewed = !!s.reviewed;
+    if (s.pro_unlocked) markAllUnlocked(s.unlocked);
   } catch {}
   refreshReviewUI(); render();
 }

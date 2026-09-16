@@ -53,6 +53,10 @@ def _db() -> sqlite3.Connection:
         "id INTEGER PRIMARY KEY AUTOINCREMENT, ts TEXT, visitor TEXT UNIQUE, "
         "name TEXT, stars INTEGER)"
     )
+    con.execute(
+        "CREATE TABLE IF NOT EXISTS unlocks("
+        "visitor TEXT PRIMARY KEY, ts TEXT, method TEXT)"
+    )
     return con
 
 
@@ -117,7 +121,10 @@ def review(body: ReviewIn):
 
 @app.get("/api/status/{visitor}")
 def status(visitor: str):
-    return {"reviewed": has_review(visitor), "watermark": not has_review(visitor)}
+    reviewed = has_review(visitor)
+    pro = _pro_unlocked(visitor)
+    return {"reviewed": reviewed, "watermark": not reviewed,
+            "pro_unlocked": pro, "unlocked": _all_pro() if pro else []}
 
 
 @app.get("/api/stats")
@@ -214,7 +221,7 @@ def generate(req: GenerateRequest):
 # Rule: when 2 UNIQUE visitors open your ?ref=CODE link, you unlock Pro themes.
 # ---------------------------------------------------------------------------
 DATA_FILE = Path(__file__).parent / "data" / "referrals.json"
-REFS_NEEDED = 2
+REFS_NEEDED = 1  # sirf 1 dost ka link kholna kaafi hai
 
 
 def _load_refs() -> dict:
@@ -290,11 +297,54 @@ def referral_unlock(body: UnlockIn):
     rec = data.get(body.code.upper())
     if rec is None:
         raise HTTPException(status_code=404, detail="bad code")
-    if body.theme not in THEMES or not THEMES[body.theme]["pro"]:
-        raise HTTPException(status_code=400, detail="not a pro theme")
     if len(rec["visitors"]) < REFS_NEEDED:
         raise HTTPException(status_code=403, detail="not enough referrals yet")
-    if body.theme not in rec["unlocked"]:
-        rec["unlocked"].append(body.theme)
-        _save_refs(data)
-    return {"ok": True, "unlocked": rec["unlocked"]}
+    # EK task = SAARE Pro themes unlock (single-theme unlock hata diya)
+    all_pro = _all_pro()
+    rec["unlocked"] = all_pro
+    _save_refs(data)
+    _unlock_all_visitor(rec.get("owner", ""), "referral")
+    return {"ok": True, "unlocked": all_pro}
+
+
+class SocialIn(BaseModel):
+    visitor: str = Field(max_length=64)
+
+
+@app.post("/api/social/unlock")
+def social_unlock(body: SocialIn):
+    """X-follow task. Honor system hai — X follow ko free me auto-verify
+    karna possible nahi (X API paid hai), isliye 'I Followed' trust pe hai."""
+    if not body.visitor.strip():
+        raise HTTPException(status_code=400, detail="visitor missing")
+    _unlock_all_visitor(body.visitor, "twitter")
+    return {"ok": True, "unlocked": _all_pro()}
+
+
+def _unlock_all_visitor(visitor: str, method: str) -> None:
+    """Kisi bhi task (referral/X) se visitor ke liye permanent unlock record."""
+    if not visitor:
+        return
+    con = _db()
+    try:
+        con.execute(
+            "INSERT OR IGNORE INTO unlocks(ts, visitor, method) VALUES(?,?,?)",
+            (_now(), visitor, method),
+        )
+        con.commit()
+    finally:
+        con.close()
+
+
+def _pro_unlocked(visitor: str) -> bool:
+    if not visitor:
+        return False
+    con = _db()
+    try:
+        return con.execute("SELECT 1 FROM unlocks WHERE visitor=?", (visitor,)).fetchone() is not None
+    finally:
+        con.close()
+
+
+def _all_pro() -> list:
+    return [n for n, m in THEMES.items() if m.get("pro")]

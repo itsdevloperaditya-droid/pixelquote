@@ -122,6 +122,22 @@ footer{text-align:center;color:var(--muted);font-size:12.5px;padding:18px;positi
 }
 .stars button.lit{color:#fbbf24;text-shadow:0 0 14px rgba(251,191,36,.7);transform:scale(1.12)}
 .ghost-btn.full{width:100%;margin-top:8px}
+
+/* Pro unlock popup — highlight banner + task options */
+.unlock-banner{
+  background:linear-gradient(90deg,#f59e0b,#ec4899);
+  color:#fff;border-radius:12px;padding:12px;margin:10px 0;
+  font-size:15px;box-shadow:0 0 18px rgba(236,72,153,.45);
+}
+.unlock-banner small{opacity:.92}
+.task-card{background:#0c0f16;border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;text-align:left}
+.task-card .charbar{margin:8px 0 2px}
+.task-or{color:var(--muted);font-weight:700;font-size:13px}
+.x-btn{
+  flex:1;display:grid;place-items:center;background:#000;color:#fff;text-decoration:none;
+  font-weight:800;font-size:14px;border:1px solid #3b4763;border-radius:12px;padding:14px 10px;
+}
+.x-btn:hover{border-color:#fff}
 .admin-link{color:var(--muted)}
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
 .stat{background:#0c0f16;border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}

@@ -27,8 +27,11 @@ referral-unlock + review-unlock + email-less waitlist style growth. Hinglish me 
 14 themes (6 free: Tech Dark, Minimal Light, Ocean Depth, Cream Paper, Charcoal,
 Lavender Mist / 8 Pro: Sunset Glow, Neon Matrix, Royal Gold, Forest Pine, Crimson,
 Mono Ink, Midnight, Peach Glow). Theme grid `/api/themes` se dynamic banta hai.
-Pro unlock = referral (?ref=CODE, 2 unique visits → unlock, backend me count).
-Watermark OFF = review (sirf naam + stars, POST /api/review). Unlimited downloads.
+Pro unlock = KOI 1 task → SAARE 8 Pro unlock (not single theme). Task A: referral
+(?ref=CODE, 1 unique visit kaafi, backend count, REFS_NEEDED=1). Task B: X follow
+button (x.com/devcoderaditya) + "I Followed" honor-system (X API paid hai, free
+verify impossible). Unlocks permanent: `unlocks` table (visitor PK) + referral
+code record. Status API batata hai pro_unlocked.
 Analytics: POST /api/track (page_view/theme_select/download/review). Owner stats:
 GET /api/stats (password protected) + `frontend/admin.html` (lock screen).
 

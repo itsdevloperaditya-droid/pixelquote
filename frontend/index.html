@@ -98,18 +98,26 @@
   <!-- Pro / referral modal -->
   <div class="modal-backdrop" id="proModal" hidden>
     <div class="modal">
-      <h3>🔓 <b id="proThemeName">Sunset Glow</b> FREE me unlock kar!</h3>
-      <p>Apna link <b>2 doston</b> ko WhatsApp pe bhej. Jaise hi dono link kholenge, ye style <b>hamesha ke liye free</b>! 🎉</p>
-      <div class="ref-progress">
-        <div class="row-between"><b id="refCount">0/2 dost aaye</b><small class="muted">auto-check hota rahega</small></div>
+      <h3>🔓 <b>ALL 8 Pro styles</b> FREE me!</h3>
+      <div class="unlock-banner">🎁 <b>EK task karo → SAARE 8 Pro unlock!</b><br><small>Ek-ek theme nahi — poora Pro pack, hamesha ke liye. Koi bhi 1 option chun lo 👇</small></div>
+      <p class="muted small">Tumne khola tha: <b id="proThemeName">Sunset Glow</b></p>
+      <div class="task-card">
+        <b>Option 1 — Link 1 dost ko bhejo (<span id="refCount">0/1</span>)</b>
         <div class="charbar"><div id="refFill"></div></div>
+        <div class="ref-link-row">
+          <input id="refLink" readonly value="link ban raha hai…" />
+          <button id="copyRef" class="ghost-btn">Copy</button>
+        </div>
+        <button id="waShare" class="wa-btn">📲 1 dost ko WhatsApp karo</button>
       </div>
-      <div class="ref-link-row">
-        <input id="refLink" readonly value="link ban raha hai…" />
-        <button id="copyRef" class="ghost-btn">Copy link</button>
+      <div class="task-or">— ya —</div>
+      <div class="task-card">
+        <b>Option 2 — X (Twitter) pe follow karo</b>
+        <div class="btn-row">
+          <a class="x-btn" href="https://x.com/devcoderaditya" target="_blank" rel="noopener">𝕏 Follow @devcoderaditya</a>
+          <button id="followedBtn" class="ghost-btn">I Followed ✅</button>
+        </div>
       </div>
-      <button id="waShare" class="wa-btn">📲 WhatsApp pe share kar</button>
-      <div class="info">Tip: ye link dost ke phone me khulna chahiye. Localhost link sirf is PC pe khulenge — doston ke liye app ko online deploy karna hoga.</div>
       <button id="proClose" class="cta">Baad me karunga</button>
     </div>
   </div>
