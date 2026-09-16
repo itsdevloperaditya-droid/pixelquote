@@ -1,0 +1,16 @@
+I'm 17 and just launched my first micro-SaaS. Write my launch post for X (Twitter).
+
+STRICT LIMIT: I'm on a free X account, so EVERY post must be under 280 characters. Count carefully. No long threads — max give a 2-post version as one option.
+
+PROJECT DETAILS:
+- Name: PixelQuote — Text-to-Graphic Generator. Live link: https://pixelquote.onrender.com/
+- Problem it solves: Making text graphics in Canva takes too long, and phone Notes-app screenshots look unprofessional. This tool turns any quote/tip into a pro social graphic in 3 seconds.
+- Features: 36 quote-card styles in 9 categories (Minimal, Modern, Gaming, Professional, Beautiful, Traditional, Poetry, Technical, Nature). 21 free, 15 Pro. 1080x1080 PNG download for Instagram/LinkedIn/X. Live preview. Unlimited free downloads, no login needed.
+- Growth hooks (no payments — I'm 17): Pro unlocks free by sharing referral link to 1 friend OR following me on X. Watermark removes free after a 1-click name + star review.
+- Tech stack: HTML/CSS/JS frontend, Node.js server, Python backend (FastAPI + Pillow for image rendering, SQLite database), hosted free on Render. Zero running cost, no AI image APIs.
+- My story/goal: 17-year-old learning web dev (Node.js + Python). My goal is to ship 1 small free micro-SaaS every week and post the journey on X to build network + skills. This is week 1.
+
+WHAT I WANT FROM YOU:
+1. Give me 4 tweet options under 280 chars each: one with a bold hook, one story-style (17yo builder angle), one problem/solution style, one short + punchy.
+2. Then 1 two-post mini-thread version (each post under 280 chars).
+3. Rules: simple English, 1 emoji max per tweet, max 1 hashtag, end with a CTA + leave [LINK] placeholder for my URL. No cringe hype words like "revolutionary" or "game-changer".
