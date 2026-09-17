@@ -39,7 +39,9 @@ Analytics: POST /api/track (page_view/theme_select/download/review). Owner stats
 GET /api/stats (password protected) + `frontend/admin.html` (lock screen).
 Mobile app UX: sticky mini-preview dock (style change = instant preview, no scroll),
 bottom fixed appbar (Edit/Style/Download/Preview jumps), 3-col touch grid, 16px inputs
-(iOS zoom fix), safe-area insets. PWA installable: `manifest.webmanifest` (standalone,
+(iOS zoom fix), safe-area insets. Style tap → auto-scroll to preview (mobile).
+Splash loader: backend cold-start wait (max ~9s safety), grid+preview paint instantly
+from local data (no backend block), status pill hidden on mobile. PWA installable: `manifest.webmanifest` (standalone,
 PixelQuote) + `sw.js` (offline app-shell, /api bypass) + `icons/` + install button/iOS hint.
 
 ## Deploy (LIVE)
