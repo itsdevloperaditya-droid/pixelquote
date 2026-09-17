@@ -41,7 +41,10 @@ Mobile app UX: sticky mini-preview dock (style change = instant preview, no scro
 bottom fixed appbar (Edit/Style/Download/Preview jumps), 3-col touch grid, 16px inputs
 (iOS zoom fix), safe-area insets. Style tap → auto-scroll to preview (mobile).
 Splash loader: backend cold-start wait (max ~9s safety), grid+preview paint instantly
-from local data (no backend block), status pill hidden on mobile. PWA installable: `manifest.webmanifest` (standalone,
+from local data (no backend block), status pill hidden on mobile.
+Mobile app-style UX: preview sticky top (compact, always visible), horizontal snap
+style strip below it (no scroll juggling), font slider + watermark button in same
+Style card, Download in bottom appbar, Copy mini-button in text card. SW cache v2. PWA installable: `manifest.webmanifest` (standalone,
 PixelQuote) + `sw.js` (offline app-shell, /api bypass) + `icons/` + install button/iOS hint.
 
 ## Deploy (LIVE)
