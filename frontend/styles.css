@@ -206,6 +206,10 @@ table.data th{color:var(--muted);font-size:12px}
   .layout{display:flex;flex-direction:column;gap:12px;margin:10px auto;padding:0 12px 10px;max-width:640px}
   .card{padding:16px;border-radius:16px;scroll-margin-top:70px}
   .panel.preview{order:-1}
+  /* mobile flow: Style pehle, Content baad me (pehle styling, phir detail) */
+  #cardStyle{order:-1}
+  #cardText{order:0}
+  .card h2 .step{display:none}
 
   /* sticky live preview — style/font badlo, preview saamne dikhe, scroll nahi */
   .preview-card{
