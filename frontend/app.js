@@ -209,14 +209,8 @@ function render() {
   $("charFill").style.width = (text.length / 280 * 100) + "%";
   $("fontVal").textContent = $("fontSize").value + "px";
   $("activeTheme").textContent = state.theme;
-}
-
-// phone pe style tap → seedha preview tak le jao (wapas change karna ho to scroll-up)
-function scrollToPreviewMobile() {
-  if (window.innerWidth <= 980) {
-    const el = document.getElementById("cardPreview");
-    if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
-  }
+  const atm = $("activeThemeM");
+  if (atm) atm.textContent = state.theme;
 }
 
 // ---------- events ----------
@@ -338,7 +332,6 @@ async function refreshProgress() {
       state.theme = done;
       paintThemes(); render();
       closeRefModal();
-      scrollToPreviewMobile();
       setTimeout(() => alert("🎉 SAARE 8 Pro styles unlock ho gaye! Ab sab hamesha free rahenge."), 300);
     }
   } catch {}
@@ -426,7 +419,11 @@ async function onThemeClick(name) {
   paintThemes();
   render();
   track("theme_select", { theme: name });
-  scrollToPreviewMobile();
+  // sticky preview saamne hi hai — scroll ki zaroorat nahi; tapped card strip me visible rahe
+  if (window.innerWidth <= 980) {
+    const btn = document.querySelector(`#themeGrid .theme[data-theme="${CSS.escape(name)}"]`);
+    if (btn) btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }
 }
 $("copyRef").addEventListener("click", async () => {
   try { await navigator.clipboard.writeText($("refLink").value); } catch {}
@@ -447,7 +444,6 @@ $("followedBtn").addEventListener("click", async () => {
     if (ref.pending) state.theme = ref.pending;
     paintThemes(); render();
     closeRefModal();
-    scrollToPreviewMobile();
     setTimeout(() => alert("🎉 SAARE 8 Pro styles unlock ho gaye! Thanks for following!"), 300);
   } catch {
     alert("Unlock nahi ho paya — app chal rahi hai na? Phir try karo.");
@@ -535,11 +531,15 @@ render();
   checkReviewStatus();
 })();
 
-$("copyBtn").addEventListener("click", async () => {
-  await navigator.clipboard.writeText($("textInput").value);
-  $("copyBtn").textContent = "Copied ✓";
-  setTimeout(() => ($("copyBtn").textContent = "Copy text"), 1200);
-});
+async function doCopyText(btn, doneLabel) {
+  try { await navigator.clipboard.writeText($("textInput").value); } catch {}
+  const old = btn.textContent;
+  btn.textContent = doneLabel || "Copied ✓";
+  setTimeout(() => (btn.textContent = old), 1200);
+}
+$("copyBtn").addEventListener("click", (e) => doCopyText(e.currentTarget, "Copied ✓"));
+const copyM = $("copyBtnM");
+if (copyM) copyM.addEventListener("click", (e) => doCopyText(e.currentTarget, "Copied ✓"));
 
 // HD download → Python backend DIRECT (fast, no proxy hop),
 // fallback to Node proxy, fallback to browser canvas

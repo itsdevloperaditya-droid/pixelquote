@@ -52,7 +52,7 @@
         <textarea id="textInput" maxlength="280" rows="4">Small steps every day compound into massive results. Start before you're ready.</textarea>
         <div class="row-between">
           <small class="muted">Like a tweet — keep it punchy.</small>
-          <small class="muted"><b id="charCount">0</b>/280</small>
+          <small class="muted"><b id="charCount">0</b>/280 · <button id="copyBtnM" class="link-btn">Copy</button></small>
         </div>
         <div class="charbar"><div id="charFill"></div></div>
 
@@ -87,6 +87,7 @@
         </div>
         <input type="range" id="fontSize" min="36" max="110" value="62" step="2" />
         <p class="muted small">Adjust manually if text is too long or short.</p>
+        <button id="rmWmBtn" class="rmwm">✨ Remove watermark FREE — 1 click!</button>
 
         <div class="note">💧 <b>Free plan:</b> tiny “Made with PixelQuote” watermark. Pro (soon) removes it + unlocks 🔒 themes.</div>
       </div>
@@ -97,6 +98,7 @@
       <div class="card preview-card">
         <h2><span class="step">3</span> Live preview &amp; export</h2>
         <p class="muted">Canvas: <b>1080 × 1080</b> (1:1) · Theme: <b id="activeTheme">Tech Dark</b> · updates as you type</p>
+        <div class="pv-line"><b id="activeThemeM">Tech Dark</b><span> · 1080 × 1080</span></div>
         <div class="canvas-wrap">
           <canvas id="canvas" width="1080" height="1080"></canvas>
         </div>
@@ -104,7 +106,6 @@
           <button id="downloadBtn" class="cta">⬇️ Download Image (.png)</button>
           <button id="copyBtn" class="ghost-btn">Copy text</button>
         </div>
-        <button id="rmWmBtn" class="rmwm">✨ Remove watermark FREE — 1 click!</button>
         <p class="muted small" id="dlHint">HD export is rendered by Python (Pillow) at full 1080p. Instant preview is drawn in your browser.</p>
       </div>
     </section>

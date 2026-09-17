@@ -1,5 +1,5 @@
 /* PixelQuote service worker — app-shell offline cache (API calls bypass) */
-const CACHE = "pixelquote-v1";
+const CACHE = "pixelquote-v2";
 const CORE = [
   "./",
   "./index.html",
