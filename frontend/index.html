@@ -2,8 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>PixelQuote — Text-to-Graphic Generator</title>
+<meta name="description" content="Text se Instagram-ready quote cards banao. Free, 36 themes, 1080x1080 HD export." />
+<meta name="theme-color" content="#0f1117" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="PixelQuote" />
 <link rel="stylesheet" href="styles.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
@@ -13,23 +23,34 @@
 
   <header class="topbar">
     <div class="brand">
-      <div class="logo">🎨</div>
+      <img class="logo-img" src="icons/icon-192.png" alt="PixelQuote" width="48" height="48" />
       <div>
         <h1>PixelQuote</h1>
         <p>Text-to-Graphic Generator · Micro-SaaS</p>
       </div>
     </div>
     <div class="top-meta">
-      <span class="pill">1080 × 1080 · 1:1</span>
-      <span class="pill ghost">Instagram · LinkedIn · X</span>
+      <span class="pill hide-sm">1080 × 1080 · 1:1</span>
+      <span class="pill ghost hide-sm">Instagram · LinkedIn · X</span>
       <span class="pill live" id="apiStatus">● connecting…</span>
+      <button id="installBtn" class="install-btn" hidden>📲 Install App</button>
     </div>
   </header>
+
+  <!-- Mobile app-style sticky preview dock: style change karte hi preview dikhe, scroll nahi -->
+  <div class="mobile-dock" id="mobileDock" aria-hidden="true">
+    <canvas id="dockCanvas" width="108" height="108"></canvas>
+    <div class="dock-info">
+      <b id="dockTheme">Tech Dark</b>
+      <small id="dockSub">tap to preview ↓</small>
+    </div>
+    <button id="dockGo" class="dock-go">👁️ View</button>
+  </div>
 
   <main class="layout">
     <!-- ============ CONTROL PANEL ============ -->
     <section class="panel controls">
-      <div class="card">
+      <div class="card" id="cardText">
         <h2><span class="step">1</span> Your content</h2>
         <textarea id="textInput" maxlength="280" rows="4">Small steps every day compound into massive results. Start before you're ready.</textarea>
         <div class="row-between">
@@ -55,7 +76,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" id="cardStyle">
         <h2><span class="step">2</span> Style</h2>
         <p class="muted">Pick a theme (filter by style):</p>
         <div class="chip-row" id="chipRow"></div>
@@ -75,7 +96,7 @@
     </section>
 
     <!-- ============ LIVE PREVIEW ============ -->
-    <section class="panel preview">
+    <section class="panel preview" id="cardPreview">
       <div class="card preview-card">
         <h2><span class="step">3</span> Live preview &amp; export</h2>
         <p class="muted">Canvas: <b>1080 × 1080</b> (1:1) · Theme: <b id="activeTheme">Tech Dark</b> · updates as you type</p>
@@ -93,6 +114,23 @@
   </main>
 
   <footer>Built with HTML + CSS + JS · Python (Pillow) · Node.js · $0 running cost · PixelQuote MVP · <a href="admin.html" class="admin-link">📊 Owner stats</a></footer>
+
+  <!-- Mobile bottom action bar — app jaisa fixed Download -->
+  <nav class="appbar" id="appbar">
+    <button class="appbar-btn" data-goto="text">✍️<small>Edit</small></button>
+    <button class="appbar-btn" data-goto="style">🎨<small>Style</small></button>
+    <button class="appbar-dl" id="appbarDl">⬇️ Download</button>
+    <button class="appbar-btn" data-goto="preview">👁️<small>Preview</small></button>
+  </nav>
+
+  <!-- iOS install hint -->
+  <div class="install-tip" id="installTip" hidden>
+    <div>
+      <b>📲 PixelQuote app install karo</b>
+      <small>iPhone: Share <b>⎙</b> → <b>Add to Home Screen</b> → Add. Phir top browser bar gayab, full app feel.</small>
+    </div>
+    <button id="installTipClose" class="ghost-btn">✕</button>
+  </div>
 
   <!-- Review modal (watermark removal: sirf naam + stars, kuch aur nahi) -->
 

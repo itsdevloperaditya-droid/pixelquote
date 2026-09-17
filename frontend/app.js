@@ -209,6 +209,17 @@ function render() {
   $("charFill").style.width = (text.length / 280 * 100) + "%";
   $("fontVal").textContent = $("fontSize").value + "px";
   $("activeTheme").textContent = state.theme;
+  // mobile dock mini-preview (style change karte hi dikhe — scroll nahi)
+  try {
+    const dock = $("dockCanvas");
+    if (dock) {
+      const dctx = dock.getContext("2d");
+      dctx.clearRect(0, 0, dock.width, dock.height);
+      dctx.drawImage(canvas, 0, 0, dock.width, dock.height);
+    }
+    const dt = $("dockTheme");
+    if (dt) dt.textContent = state.theme;
+  } catch {}
 }
 
 // ---------- events ----------
@@ -576,5 +587,81 @@ $("downloadBtn").addEventListener("click", async () => {
   }
   $("apiStatus").textContent = "● preview-only mode";
 })();
+
+// ---------- mobile appbar: section jumps + Download shortcut ----------
+document.querySelectorAll(".appbar-btn").forEach((b) => {
+  b.addEventListener("click", () => {
+    const map = { text: "cardText", style: "cardStyle", preview: "cardPreview" };
+    const el = document.getElementById(map[b.dataset.goto] || "cardText");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    track("appbar_nav", { to: b.dataset.goto });
+  });
+});
+$("appbarDl").addEventListener("click", () => $("downloadBtn").click());
+// download button state bottom bar pe mirror karo
+new MutationObserver(() => {
+  const src = $("downloadBtn");
+  const dst = $("appbarDl");
+  if (!src || !dst) return;
+  dst.disabled = src.disabled;
+  dst.textContent = src.disabled ? "⏳ Rendering…" : "⬇️ Download";
+}).observe($("downloadBtn"), { attributes: true, childList: true, characterData: true, subtree: true });
+// dock "View" → preview tak smooth scroll
+$("dockGo").addEventListener("click", () => {
+  document.getElementById("cardPreview").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+$("mobileDock").addEventListener("click", (e) => {
+  if (e.target.id !== "dockGo")
+    document.getElementById("cardPreview").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+// ---------- PWA: service worker + Install App ----------
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
+let deferredPrompt = null;
+const installBtn = $("installBtn");
+const installTip = $("installTip");
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone =
+  window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBtn && !isStandalone) installBtn.hidden = false;
+});
+if (installBtn) {
+  installBtn.addEventListener("click", async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice.catch(() => {});
+      deferredPrompt = null;
+      installBtn.hidden = true;
+    } else if (isIOS && !isStandalone) {
+      if (installTip) installTip.hidden = false; // iOS me manual steps dikhao
+    } else {
+      // desktop Chrome: hint
+      alert("Browser menu (⋮) → Cast/Save → Install / Add to Home Screen se PixelQuote app install karo 📲");
+    }
+    track("pwa_install_click", {});
+  });
+}
+// iOS pe pehli visit me ek baar hint dikhao (dismiss localStorage me yaad)
+if (isIOS && !isStandalone && installTip && !localStorage.getItem("pq_ios_tip")) {
+  setTimeout(() => (installTip.hidden = false), 2500);
+}
+if ($("installTipClose")) {
+  $("installTipClose").addEventListener("click", () => {
+    installTip.hidden = true;
+    try { localStorage.setItem("pq_ios_tip", "1"); } catch {}
+  });
+}
+window.addEventListener("appinstalled", () => {
+  if (installBtn) installBtn.hidden = true;
+  if (installTip) installTip.hidden = true;
+  track("pwa_installed", {});
+});
 
 render();
