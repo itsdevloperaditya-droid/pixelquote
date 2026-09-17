@@ -37,6 +37,10 @@ verify impossible). Unlocks permanent: `unlocks` table (visitor PK) + referral
 code record. Status API batata hai pro_unlocked.
 Analytics: POST /api/track (page_view/theme_select/download/review). Owner stats:
 GET /api/stats (password protected) + `frontend/admin.html` (lock screen).
+Mobile app UX: sticky mini-preview dock (style change = instant preview, no scroll),
+bottom fixed appbar (Edit/Style/Download/Preview jumps), 3-col touch grid, 16px inputs
+(iOS zoom fix), safe-area insets. PWA installable: `manifest.webmanifest` (standalone,
+PixelQuote) + `sw.js` (offline app-shell, /api bypass) + `icons/` + install button/iOS hint.
 
 ## Deploy (LIVE)
 - Backend (Render Web Service, free): https://pixelquote-backend.onrender.com
