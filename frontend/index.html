@@ -19,6 +19,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- Splash loader: backend cold-start tak wait, phir app show -->
+  <div class="splash" id="splash">
+    <img src="icons/icon-192.png" alt="PixelQuote" width="84" height="84" />
+    <h1>PixelQuote</h1>
+    <div class="spinner"></div>
+    <p id="splashText">HD server se connect ho raha hai…</p>
+  </div>
   <div class="bg-orbs"><span></span><span></span></div>
 
   <header class="topbar">
@@ -36,16 +43,6 @@
       <button id="installBtn" class="install-btn" hidden>📲 Install App</button>
     </div>
   </header>
-
-  <!-- Mobile app-style sticky preview dock: style change karte hi preview dikhe, scroll nahi -->
-  <div class="mobile-dock" id="mobileDock" aria-hidden="true">
-    <canvas id="dockCanvas" width="108" height="108"></canvas>
-    <div class="dock-info">
-      <b id="dockTheme">Tech Dark</b>
-      <small id="dockSub">tap to preview ↓</small>
-    </div>
-    <button id="dockGo" class="dock-go">👁️ View</button>
-  </div>
 
   <main class="layout">
     <!-- ============ CONTROL PANEL ============ -->

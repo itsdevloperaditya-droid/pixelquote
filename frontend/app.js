@@ -209,17 +209,14 @@ function render() {
   $("charFill").style.width = (text.length / 280 * 100) + "%";
   $("fontVal").textContent = $("fontSize").value + "px";
   $("activeTheme").textContent = state.theme;
-  // mobile dock mini-preview (style change karte hi dikhe — scroll nahi)
-  try {
-    const dock = $("dockCanvas");
-    if (dock) {
-      const dctx = dock.getContext("2d");
-      dctx.clearRect(0, 0, dock.width, dock.height);
-      dctx.drawImage(canvas, 0, 0, dock.width, dock.height);
-    }
-    const dt = $("dockTheme");
-    if (dt) dt.textContent = state.theme;
-  } catch {}
+}
+
+// phone pe style tap → seedha preview tak le jao (wapas change karna ho to scroll-up)
+function scrollToPreviewMobile() {
+  if (window.innerWidth <= 980) {
+    const el = document.getElementById("cardPreview");
+    if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+  }
 }
 
 // ---------- events ----------
@@ -257,10 +254,23 @@ if (!ref.vid) {
   ref.vid = (crypto.randomUUID ? crypto.randomUUID() : "v-" + Date.now() + "-" + Math.random().toString(16).slice(2));
   localStorage.setItem("pq_vid", ref.vid);
 }
-async function apiJSON(url, opts) {
-  const r = await fetch(url, opts);
-  if (!r.ok) throw new Error("http " + r.status);
-  return r.json();
+async function apiJSON(url, opts, ms) {
+  // cold-start hang se bachne ke liye timeout (default 8s)
+  let ctrl, timer;
+  try {
+    if (typeof AbortSignal !== "undefined" && AbortSignal.timeout) {
+      (opts = opts || {}).signal = AbortSignal.timeout(ms || 8000);
+    } else if (typeof AbortController !== "undefined") {
+      ctrl = new AbortController();
+      (opts = opts || {}).signal = ctrl.signal;
+      timer = setTimeout(() => ctrl.abort(), ms || 8000);
+    }
+    const r = await fetch(url, opts);
+    if (!r.ok) throw new Error("http " + r.status);
+    return r.json();
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
 }
 async function refCall(path, body) {
   const opts = body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : undefined;
@@ -328,6 +338,7 @@ async function refreshProgress() {
       state.theme = done;
       paintThemes(); render();
       closeRefModal();
+      scrollToPreviewMobile();
       setTimeout(() => alert("🎉 SAARE 8 Pro styles unlock ho gaye! Ab sab hamesha free rahenge."), 300);
     }
   } catch {}
@@ -350,18 +361,7 @@ function filterCat(cat) {
     el.style.display = (cat === "All" || el.dataset.cat === cat) ? "" : "none";
   });
 }
-async function loadThemeGrid() {
-  let order = Object.keys(THEME_STYLE);
-  const proMap = {}, catMap = {};
-  order.forEach((n) => { proMap[n] = !!THEME_STYLE[n].pro; catMap[n] = THEME_STYLE[n].cat || "Modern"; });
-  try {
-    const t = await refCall("/api/themes"); // {name: {description, pro, cat}}
-    const apiOrder = Object.keys(t).filter((n) => THEME_STYLE[n]);
-    if (apiOrder.length) {
-      order = apiOrder;
-      order.forEach((n) => { proMap[n] = !!t[n].pro; if (t[n].cat) catMap[n] = t[n].cat; });
-    }
-  } catch {}
+function paintGrid(order, proMap, catMap) {
   PRO_THEMES = order.filter((n) => proMap[n]);
   // filter chips
   const chips = $("chipRow");
@@ -395,6 +395,26 @@ async function loadThemeGrid() {
   });
   paintThemes();
 }
+// grid TURANT local data se paint karo (backend wait nahi) — phir API se enhance
+function loadThemeGrid() {
+  const order = Object.keys(THEME_STYLE);
+  const proMap = {}, catMap = {};
+  order.forEach((n) => { proMap[n] = !!THEME_STYLE[n].pro; catMap[n] = THEME_STYLE[n].cat || "Modern"; });
+  paintGrid(order, proMap, catMap);
+  // background enhance: backend jaag jaye to pro/cat flags sync kar lo
+  (async () => {
+    try {
+      const t = await refCall("/api/themes"); // {name: {description, pro, cat}}
+      const apiOrder = Object.keys(t).filter((n) => THEME_STYLE[n]);
+      if (!apiOrder.length) return;
+      const p2 = {}, c2 = {};
+      apiOrder.forEach((n) => { p2[n] = !!t[n].pro; c2[n] = t[n].cat || THEME_STYLE[n].cat || "Modern"; });
+      // sirf tab repaint jab kuch बदला ho
+      const changed = apiOrder.some((n) => p2[n] !== proMap[n] || c2[n] !== catMap[n]);
+      if (changed) paintGrid(apiOrder, p2, c2);
+    } catch {}
+  })();
+}
 async function onThemeClick(name) {
   if (!isUnlocked(name)) {
     await ensureCode();
@@ -406,6 +426,7 @@ async function onThemeClick(name) {
   paintThemes();
   render();
   track("theme_select", { theme: name });
+  scrollToPreviewMobile();
 }
 $("copyRef").addEventListener("click", async () => {
   try { await navigator.clipboard.writeText($("refLink").value); } catch {}
@@ -426,6 +447,7 @@ $("followedBtn").addEventListener("click", async () => {
     if (ref.pending) state.theme = ref.pending;
     paintThemes(); render();
     closeRefModal();
+    scrollToPreviewMobile();
     setTimeout(() => alert("🎉 SAARE 8 Pro styles unlock ho gaye! Thanks for following!"), 300);
   } catch {
     alert("Unlock nahi ho paya — app chal rahi hai na? Phir try karo.");
@@ -492,22 +514,25 @@ async function checkReviewStatus() {
   refreshReviewUI(); render();
 }
 
-// init: my code + count visit if I came from a friend's link + sync unlocks
+// init: grid+preview TURANT dikhao (backend wait nahi) — backend kaam background me
+loadThemeGrid();
+refreshReviewUI();
+render();
 (async () => {
-  await ensureCode();
-  track("page_view", {});
-  await loadThemeGrid();
-  await checkReviewStatus();
-  const q = (new URLSearchParams(location.search).get("ref") || "").toUpperCase();
-  if (q && q !== (ref.code || "").toUpperCase() && !localStorage.getItem("visited_" + q)) {
-    try {
-      await refCall("/api/referral/visit", { code: q, visitor: ref.vid });
-      localStorage.setItem("visited_" + q, "1");
-      setTimeout(() => alert("🎉 Dost ke link se aaye ho — welcome!"), 800);
-    } catch {}
-  }
-  await syncUnlocked();
-  paintThemes();
+  ensureCode().then(() => {
+    track("page_view", {});
+    syncUnlocked();
+    const q = (new URLSearchParams(location.search).get("ref") || "").toUpperCase();
+    if (q && q !== (ref.code || "").toUpperCase() && !localStorage.getItem("visited_" + q)) {
+      refCall("/api/referral/visit", { code: q, visitor: ref.vid })
+        .then(() => {
+          localStorage.setItem("visited_" + q, "1");
+          setTimeout(() => alert("🎉 Dost ke link se aaye ho — welcome!"), 800);
+        })
+        .catch(() => {});
+    }
+  });
+  checkReviewStatus();
 })();
 
 $("copyBtn").addEventListener("click", async () => {
@@ -573,20 +598,43 @@ $("downloadBtn").addEventListener("click", async () => {
   }
 });
 
-// backend status dot (direct Python first, then Node proxy)
-(async () => {
-  for (const u of [`${API_DIRECT}/api/health`, "/api/health"]) {
-    try {
-      const r = await fetch(u, { cache: "no-store" });
-      if (r.ok) {
-        $("apiStatus").textContent = "● Python connected";
-        $("apiStatus").classList.add("ok");
-        return;
-      }
-    } catch {}
+// backend status dot (desktop) + splash wait (max ~6s, phir app show hi hoga)
+function hideSplash() {
+  const sp = $("splash");
+  if (sp && !sp.classList.contains("done")) {
+    sp.classList.add("done");
+    setTimeout(() => sp.remove(), 450);
   }
-  $("apiStatus").textContent = "● preview-only mode";
+}
+(async () => {
+  const t0 = Date.now();
+  let ok = false;
+  for (let i = 0; i < 6 && !ok; i++) {
+    for (const u of [`${API_DIRECT}/api/health`, "/api/health"]) {
+      try {
+        const ctl = typeof AbortController !== "undefined" ? new AbortController() : null;
+        const to = ctl ? setTimeout(() => ctl.abort(), 4000) : null;
+        const r = await fetch(u, { cache: "no-store", signal: ctl ? ctl.signal : undefined });
+        if (to) clearTimeout(to);
+        if (r.ok) { ok = true; break; }
+      } catch {}
+    }
+    if (!ok && i < 5) {
+      const s = Math.round((Date.now() - t0) / 1000);
+      const el = $("splashText");
+      if (el) el.textContent = s < 3 ? "HD server se connect ho raha hai…" : `Server jaag raha hai… ${s}s ⏳`;
+      await new Promise((res) => setTimeout(res, 1000));
+    }
+  }
+  const pill = $("apiStatus");
+  if (pill) {
+    pill.textContent = ok ? "● Python connected" : "● preview-only mode";
+    if (ok) pill.classList.add("ok");
+  }
+  hideSplash();
 })();
+// safety: splash kabhi atka na rahe
+setTimeout(hideSplash, 9000);
 
 // ---------- mobile appbar: section jumps + Download shortcut ----------
 document.querySelectorAll(".appbar-btn").forEach((b) => {
@@ -606,14 +654,6 @@ new MutationObserver(() => {
   dst.disabled = src.disabled;
   dst.textContent = src.disabled ? "⏳ Rendering…" : "⬇️ Download";
 }).observe($("downloadBtn"), { attributes: true, childList: true, characterData: true, subtree: true });
-// dock "View" → preview tak smooth scroll
-$("dockGo").addEventListener("click", () => {
-  document.getElementById("cardPreview").scrollIntoView({ behavior: "smooth", block: "start" });
-});
-$("mobileDock").addEventListener("click", (e) => {
-  if (e.target.id !== "dockGo")
-    document.getElementById("cardPreview").scrollIntoView({ behavior: "smooth", block: "start" });
-});
 
 // ---------- PWA: service worker + Install App ----------
 if ("serviceWorker" in navigator) {
