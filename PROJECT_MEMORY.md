@@ -44,7 +44,8 @@ Splash loader: backend cold-start wait (max ~9s safety), grid+preview paint inst
 from local data (no backend block), status pill hidden on mobile.
 Mobile app-style UX: preview sticky top (compact, always visible), horizontal snap
 style strip below it (no scroll juggling), font slider + watermark button in same
-Style card, Download in bottom appbar, Copy mini-button in text card. SW cache v2. PWA installable: `manifest.webmanifest` (standalone,
+Style card, Download in bottom appbar, Copy mini-button in text card. SW cache v2.
+Mobile flow order: sticky preview → Style → Content (step numbers hidden on mobile). PWA installable: `manifest.webmanifest` (standalone,
 PixelQuote) + `sw.js` (offline app-shell, /api bypass) + `icons/` + install button/iOS hint.
 
 ## Deploy (LIVE)
